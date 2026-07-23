@@ -29,13 +29,24 @@
       padding: 20px 16px 10px;
       box-shadow: 0 1px 6px rgba(0,0,0,0.3);
     }
-    h1 {
-      text-align: center;
-      font-weight: 400;
-      font-size: 1.8rem;
-      margin-bottom: 2px;
-      letter-spacing: 0.05em;
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .episode-select {
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background: white;
+      font-size: 0.9rem;
       color: #4a3f35;
+      outline: none;
+      cursor: pointer;
+      flex: 1;
     }
 
     .search-bar {
@@ -78,7 +89,7 @@
 
     .scroll-container {
       position: fixed;
-      top: 70px;
+      top: 100px;
       bottom: 60px;
       left: 0;
       right: 0;
@@ -342,10 +353,16 @@
   </style>
 </head>
 <body>
-  <!-- 隐藏的持久音频元素，用于锁屏后播放 -->
   <audio id="bgAudio" playsinline webkit-playsinline preload="auto"></audio>
 
   <div class="header">
+    <div class="top-row">
+      <select id="episodeSelect" class="episode-select">
+        <option value="ep1">第一集</option>
+        <option value="ep2">第二集</option>
+        <!-- 以后新增剧集只需在这里加 option -->
+      </select>
+    </div>
     <div class="search-bar">
       <input type="text" class="search-input" id="searchInput" placeholder="搜索罗马音 / 日文 / 中文...">
       <div class="filter-fav" id="filterFavBtn">
@@ -397,7 +414,8 @@
       const abBtn = document.getElementById('abBtn');
       const speedMenu = document.getElementById('speedMenu');
       const toast = document.getElementById('toast');
-      const bgAudio = document.getElementById('bgAudio');  // 持久音频
+      const bgAudio = document.getElementById('bgAudio');
+      const episodeSelect = document.getElementById('episodeSelect');
 
       let allLines = [];
       let filteredLines = [];
@@ -413,7 +431,10 @@
       function savePreferences() {
         try {
           localStorage.setItem('nihongo_player_prefs', JSON.stringify({
-            speed: currentSpeed, autoPlay: autoPlay, favorites: Array.from(favorites)
+            speed: currentSpeed,
+            autoPlay: autoPlay,
+            favorites: Array.from(favorites),
+            episode: episodeSelect.value
           }));
         } catch (e) {}
       }
@@ -425,8 +446,30 @@
             if (p.speed && SPEEDS.includes(p.speed)) currentSpeed = p.speed;
             if (typeof p.autoPlay === 'boolean') autoPlay = p.autoPlay;
             if (Array.isArray(p.favorites)) favorites = new Set(p.favorites);
+            if (p.episode) episodeSelect.value = p.episode;
           }
         } catch (e) {}
+      }
+
+      // 加载指定剧集的 JSON 数据
+      function loadEpisode(ep) {
+        stopCurrent();
+        container.innerHTML = '<div class="no-result">加载中...</div>';
+        fetch(`data/${ep}.json`)
+          .then(res => res.ok ? res.json() : Promise.reject('加载失败'))
+          .then(data => {
+            if (!Array.isArray(data)) throw new Error('格式错误');
+            allLines = data;
+            allLines.forEach(line => {
+              if (!(line.audio in loopStates)) loopStates[line.audio] = false;
+            });
+            applyFilter();
+            savePreferences();
+          })
+          .catch(err => {
+            container.innerHTML = '<div class="no-result">❌ 数据加载失败，请检查文件</div>';
+            console.error(err);
+          });
       }
 
       function escapeHtml(text) {
@@ -450,13 +493,11 @@
       function getNextIndex(id) {
         const idx = filteredLines.findIndex(l => l.audio === id);
         if (idx === -1) return -1;
-        // 如果是最后一句，返回0（实现列表循环）
         return idx < filteredLines.length - 1 ? idx + 1 : 0;
       }
       function getPrevIndex(id) {
         const idx = filteredLines.findIndex(l => l.audio === id);
         if (idx === -1) return -1;
-        // 如果是第一句，返回最后一句
         return idx > 0 ? idx - 1 : filteredLines.length - 1;
       }
 
@@ -474,9 +515,7 @@
         if (speed === currentSpeed) return;
         currentSpeed = speed;
         updateAllSpeedDisplay();
-        if (bgAudio && !bgAudio.paused) {
-          bgAudio.playbackRate = currentSpeed;
-        }
+        if (bgAudio && !bgAudio.paused) bgAudio.playbackRate = currentSpeed;
         savePreferences();
       }
 
@@ -559,7 +598,6 @@
 
       function playLine(audioSrc, loop) {
         stopCurrent(false);
-
         bgAudio.src = audioSrc;
         bgAudio.loop = loop;
         bgAudio.playbackRate = currentSpeed;
@@ -578,7 +616,6 @@
         if (line) setupMediaSession(line);
         startProgressUpdater();
 
-        // 清除之前的 ended 监听（通过替换 onended）
         bgAudio.onended = () => {
           if (!bgAudio.loop) {
             if (abActive && currentAudioId === abAudioId && pointA !== pointB) {
@@ -667,9 +704,7 @@
         if (bgAudio.currentTime >= pointB) bgAudio.currentTime = pointA;
       }
       function clearABActive() {
-        if (abActive) {
-          bgAudio.ontimeupdate = null;
-        }
+        if (abActive) bgAudio.ontimeupdate = null;
         abActive = false; abPhase = null; abAudioId = null;
         abBtn.classList.remove('active'); abBtn.textContent = 'A-B';
       }
@@ -808,7 +843,6 @@
         renderLines(filteredLines);
       }
 
-      // 后台播放恢复
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden && bgAudio && bgAudio.paused && currentAudioId) {
           bgAudio.play().catch(() => {});
@@ -835,6 +869,11 @@
         applyFilter();
       });
 
+      // 剧集切换
+      episodeSelect.addEventListener('change', () => {
+        loadEpisode(episodeSelect.value);
+      });
+
       speedMenu.addEventListener('click', (e) => {
         const li = e.target.closest('li');
         if (!li) return;
@@ -848,6 +887,7 @@
       });
       speedMenu.addEventListener('click', (e) => e.stopPropagation());
 
+      // 初始化
       loadPreferences();
       updateAllSpeedDisplay();
       if (autoPlay) {
@@ -855,18 +895,8 @@
         autoPlayBtn.textContent = '自动✓';
       }
 
-      fetch('data.json')
-        .then(res => res.ok ? res.json() : Promise.reject('加载失败'))
-        .then(data => {
-          if (!Array.isArray(data)) throw new Error('格式错误');
-          allLines = data;
-          allLines.forEach(line => { if (!(line.audio in loopStates)) loopStates[line.audio] = false; });
-          applyFilter();
-        })
-        .catch(err => {
-          container.innerHTML = '<div class="no-result">❌ 数据加载失败，请检查 data.json</div>';
-          console.error(err);
-        });
+      // 加载上次选择的剧集（默认为 ep1）
+      loadEpisode(episodeSelect.value || 'ep1');
     })();
   </script>
 </body>
