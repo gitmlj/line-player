@@ -359,7 +359,7 @@
     <div class="top-row">
       <select id="episodeSelect" class="episode-select">
         <option value="ep1">第一集</option>
-        <option value="ep2">第二集</option>
+        <option value="ep6">第六集</option>
         <!-- 以后新增剧集只需在这里加 option -->
       </select>
     </div>
@@ -428,6 +428,15 @@
       let abActive = false, abPhase = null, pointA = 0, pointB = 0, abAudioId = null;
       let progressTimer = null;
 
+      // ---------- 音频路径转换：将旧格式 line001.mp3 转为新格式 line_001.mp3 ----------
+      function normalizeAudioPath(path) {
+        // 匹配最后一个斜杠后的文件名，替换规则：line+数字 => line_数字 (不区分大小写)
+        return path.replace(/\/([^/]+)$/, (match, filename) => {
+          const newName = filename.replace(/^(line)(\d+)\.mp3$/i, 'line_$2.mp3');
+          return '/' + newName;
+        });
+      }
+
       function savePreferences() {
         try {
           localStorage.setItem('nihongo_player_prefs', JSON.stringify({
@@ -459,7 +468,11 @@
           .then(res => res.ok ? res.json() : Promise.reject('加载失败'))
           .then(data => {
             if (!Array.isArray(data)) throw new Error('格式错误');
-            allLines = data;
+            // 转换所有台词中的音频路径为新格式
+            allLines = data.map(line => ({
+              ...line,
+              audio: normalizeAudioPath(line.audio)
+            }));
             allLines.forEach(line => {
               if (!(line.audio in loopStates)) loopStates[line.audio] = false;
             });

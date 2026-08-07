@@ -1,0 +1,230 @@
+[
+  {
+    "romaji": "Damatte iyou ka to omotta ga yahari hanasu koto ni shita",
+    "japanese": "黙（だま）っていようかと思（おも）ったが やはり話（はな）すことにした",
+    "chinese": "虽然我本想瞒着你的 但我还是决定告诉你",
+    "audio": "audio/line001.mp3"
+  },
+  {
+    "romaji": "Jūyō na koto da",
+    "japanese": "重要（じゅうよう）なことだ",
+    "chinese": "是一件十分重要的事",
+    "audio": "audio/line002.mp3"
+  },
+  {
+    "romaji": "Kimi ga nikushin no koto o omou kokoro wa totemo tsuyoi mono da",
+    "japanese": "きみが肉親（にくしん）のことを思（おも）う心（こころ）はとても強（つよ）いものだ",
+    "chinese": "你对父母的牵挂非常强烈",
+    "audio": "audio/line003.mp3"
+  },
+  {
+    "romaji": "Sore ni kurabe watashi no koto o karuku",
+    "japanese": "それに比（くら）べ 私（わたし）のことを軽（かる）く",
+    "chinese": "与此相比 我在你心里显得轻如鸿毛",
+    "audio": "audio/line004.mp3"
+  },
+  {
+    "romaji": "Iya mushiro yakkaimono da to omotteiru koto mo shitteiru",
+    "japanese": "いや むしろ厄介者（やっかいもの）だと思（おも）っていることも知（し）っている",
+    "chinese": "不 甚至被当成了累赘",
+    "audio": "audio/line005.mp3"
+  },
+  {
+    "romaji": "Wareware wa mikata de aru to dōji ni",
+    "japanese": "我々（われわれ）は味方（みかた）であると同時（どうじ）に",
+    "chinese": "我们是同伴的同时",
+    "audio": "audio/line006.mp3"
+  },
+  {
+    "romaji": "Shu no chigau teki dōshi to ieru no kamo shirenai",
+    "japanese": "種（しゅ）の違（ちが）う敵同士（てきどうし）と言（い）えるのかもしれない",
+    "chinese": "也可以说是异族的敌人",
+    "audio": "audio/line007.mp3"
+  },
+  {
+    "romaji": "Nani ga iitai",
+    "japanese": "何（なに）が言（い）いたい",
+    "chinese": "你想说什么",
+    "audio": "audio/line008.mp3"
+  },
+  {
+    "romaji": "Ano hi hakai sareta kimi no karada o shūfuku suru katei ni oite",
+    "japanese": "あの日（ひ） 破壊（はかい）された君（きみ）の体（からだ）を修復（しゅうふく）する過程（かてい）において",
+    "chinese": "那天在修复你受伤的身体的过程中",
+    "audio": "audio/line009.mp3"
+  },
+  {
+    "romaji": "Watashi no karada ni mo henka ga okita",
+    "japanese": "私（わたし）の体（からだ）にも変化（へんか）が起（お）きた",
+    "chinese": "我的身体也发生了变化",
+    "audio": "audio/line010.mp3"
+  },
+  {
+    "romaji": "Henka?",
+    "japanese": "変化（へんか）？",
+    "chinese": "变化？",
+    "audio": "audio/line011.mp3"
+  },
+  {
+    "romaji": "Jakuten da yo",
+    "japanese": "弱点（じゃくてん）だよ",
+    "chinese": "就是弱点",
+    "audio": "audio/line012.mp3"
+  },
+  {
+    "romaji": "Hoka no kisei seibutsu ni nai jakuten ga watashi ni dekite shimattan da",
+    "japanese": "他（ほか）の寄生生物（きせいせいぶつ）にない弱点（じゃくてん）が 私（わたし）にできてしまったんだ",
+    "chinese": "我身上出现了其他寄生生物并不具备的弱点",
+    "audio": "audio/line013.mp3"
+  },
+  {
+    "romaji": "Ichi-nichi no uchi yo-jikan hodo no aida watashi wa kanzen ni nemutte shimau",
+    "japanese": "1日（いちにち）のうち4時間（よじかん）ほどの間（あいだ） 私（わたし）は完全（かんぜん）に眠（ねむ）ってしまう",
+    "chinese": "一天中我会有4个小时左右陷入深度睡眠状态",
+    "audio": "audio/line014.mp3"
+  },
+  {
+    "romaji": "Nanda ima made datte neteta daro",
+    "japanese": "なんだ 今（いま）までだって寝（ね）てただろ",
+    "chinese": "什么啊 你以前也不是一直在睡吗",
+    "audio": "audio/line015.mp3"
+  },
+  {
+    "romaji": "Sō janai",
+    "japanese": "そうじゃない",
+    "chinese": "不一样的",
+    "audio": "audio/line016.mp3"
+  },
+  {
+    "romaji": "Ima made wa nemutteite mo chotto shita koto de me ga sameta",
+    "japanese": "今（いま）までは眠（ねむ）っていてもちょっとしたことで目（め）が覚（さ）めた",
+    "chinese": "以前就算在睡觉 一有风吹草动我就会醒",
+    "audio": "audio/line017.mp3"
+  },
+  {
+    "romaji": "Shin'ichi ga odoroitari kokyū o midashitari",
+    "japanese": "シンイチが驚（おどろ）いたり呼吸（こきゅう）を乱（みだ）したり",
+    "chinese": "你吃惊 呼吸紊乱的时候",
+    "audio": "audio/line018.mp3"
+  },
+  {
+    "romaji": "Arui wa nakama ga sanbyaku-mētoru saki ni arawarete mo da",
+    "japanese": "あるいは 仲間（なかま）が300（さんびゃく）メートル先（さき）に現（あらわ）れてもだ",
+    "chinese": "或者300米以内有同类出现的时候",
+    "audio": "audio/line019.mp3"
+  },
+  {
+    "romaji": "Nakama ga…",
+    "japanese": "仲間（なかま）が…",
+    "chinese": "同类…",
+    "audio": "audio/line020.mp3"
+  },
+  {
+    "romaji": "Sō da",
+    "japanese": "そうだ",
+    "chinese": "没错",
+    "audio": "audio/line021.mp3"
+  },
+  {
+    "romaji": "Shikashi kondo no nemuri wa sōshita antena made ga marude kikanakunaru",
+    "japanese": "しかし今度（こんど）の眠（ねむ）りはそうしたアンテナまでがまるで効（き）かなくなる",
+    "chinese": "但这次的睡眠 就连那些紧急信号都不会起作用",
+    "audio": "audio/line022.mp3"
+  },
+  {
+    "romaji": "Tsumari kono yo-jikan no aida ni teki ga arawarereba",
+    "japanese": "つまりこの4時間（よじかん）の間（あいだ）に敵（てき）が現（あらわ）れれば",
+    "chinese": "也就是说这4小时内如果出现了敌人",
+    "audio": "audio/line023.mp3"
+  },
+  {
+    "romaji": "Subete ga owari to iu koto da",
+    "japanese": "すべてが終（お）わりということだ",
+    "chinese": "就一切都完了",
+    "audio": "audio/line024.mp3"
+  },
+  {
+    "romaji": "Kimi no shinzō o shūfuku suru ni atatte watashi wa chōjikan migiude kara hanareta",
+    "japanese": "君（きみ）の心臓（しんぞう）を修復（しゅうふく）するにあたって 私（わたし）は長時間（ちょうじかん）右腕（みぎうで）から離（はな）れた",
+    "chinese": "修复你的心脏的时候 我曾长时间离开了你的右臂",
+    "audio": "audio/line025.mp3"
+  },
+  {
+    "romaji": "Sono kekka taishitsu ga shōshō kawatte shimattan da yo",
+    "japanese": "その結果（けっか） 体質（たいしつ）が少々（しょうしょう）変（か）わってしまったんだよ",
+    "chinese": "结果导致我的体质发生了一点变化",
+    "audio": "audio/line026.mp3"
+  },
+  {
+    "romaji": "Nande sonna daiji na koto damattetan da yo",
+    "japanese": "なんでそんな大事（だいじ）なこと黙（だま）ってたんだよ",
+    "chinese": "为什么这么重要的事情不早告诉我",
+    "audio": "audio/line027.mp3"
+  },
+  {
+    "romaji": "Kimi wa hahaoya o korosarete",
+    "japanese": "君（きみ）は母親（ははおや）を殺（ころ）されて",
+    "chinese": "你母亲被杀",
+    "audio": "audio/line028.mp3"
+  },
+  {
+    "romaji": "Kisei seibutsu no nakama de aru watashi ni tsuyoi tekii o motta yō da na",
+    "japanese": "寄生生物（きせいせいぶつ）の仲間（なかま）である私（わたし）に強（つよ）い敵意（てきい）を持（も）ったようだな",
+    "chinese": "我身为寄生生物的同类 你好像对我敌意很大",
+    "audio": "audio/line029.mp3"
+  },
+  {
+    "romaji": "Jibun no jakuten o teki ni oshieru no wa hijō ni kiken na koto da",
+    "japanese": "自分（じぶん）の弱点（じゃくてん）を敵（てき）に教（おし）えるのは非常（ひじょう）に危険（きけん）なことだ",
+    "chinese": "将自己的弱点告诉敌人是及其危险的",
+    "audio": "audio/line030.mp3"
+  },
+  {
+    "romaji": "Dakara ima made damatteita",
+    "japanese": "だから今（いま）まで黙（だま）っていた",
+    "chinese": "所以我才会瞒你到现在",
+    "audio": "audio/line031.mp3"
+  },
+  {
+    "romaji": "Da ga kimi ni shitte oite morawanakereba sara ni",
+    "japanese": "だが君（きみ）に知（し）っておいてもらわなければ さらに",
+    "chinese": "但如果什么都不告诉你",
+    "audio": "audio/line032.mp3"
+  },
+  {
+    "romaji": "Yori issō kiken da to handan shita wake da",
+    "japanese": "より一層危険（いっそうきけん）だと判断（はんだん）したわけだ",
+    "chinese": "就会陷入更加危险的境地",
+    "audio": "audio/line033.mp3"
+  },
+  {
+    "romaji": "Wakatta ka ne",
+    "japanese": "わかったかね",
+    "chinese": "你明白了吗",
+    "audio": "audio/line034.mp3"
+  },
+  {
+    "romaji": "Ore wa mō Migī no koto o teki da nante omottenai yo",
+    "japanese": "俺（おれ）はもうミギーのことを敵（てき）だなんて思（おも）ってないよ",
+    "chinese": "我已经不把你当成敌人了",
+    "audio": "audio/line035.mp3"
+  },
+  {
+    "romaji": "Inochi no onjin da mon na",
+    "japanese": "命（いのち）の恩人（おんじん）だもんな",
+    "chinese": "毕竟你救了我一命",
+    "audio": "audio/line036.mp3"
+  },
+  {
+    "romaji": "Sono iikata wa seikaku janai na",
+    "japanese": "その言（い）い方（かた）は正確（せいかく）じゃないな",
+    "chinese": "你的说法并不准确",
+    "audio": "audio/line037.mp3"
+  },
+  {
+    "romaji": "Watashi no tame no inochi demo aru",
+    "japanese": "わたしのための命（いのち）でもある",
+    "chinese": "我也是为了救我自己",
+    "audio": "audio/line038.mp3"
+  }
+]
