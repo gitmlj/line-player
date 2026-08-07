@@ -1,934 +1,1119 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover"
-    />
-    <title>日剧台词播放器</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>日剧台词播放器</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      body {
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
-          "Noto Sans JP", sans-serif;
-        background: #f5f0eb;
-        color: #2e2e2e;
-        height: 100vh;
-        overflow: hidden;
-      }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+      background: #f5f0eb;
+      color: #2e2e2e;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-      .header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        background: #f5f0eb;
-        z-index: 110;
-        padding: 20px 16px 10px;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
-      }
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #f5f0eb;
+      z-index: 110;
+      padding: 20px 16px 10px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+    }
 
-      .top-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 10px;
-      }
+    .top-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
 
-      .episode-select {
-        padding: 6px 12px;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        background: white;
-        font-size: 0.9rem;
-        color: #4a3f35;
-        outline: none;
-        cursor: pointer;
-        flex: 1;
-      }
+    .episode-select {
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background: white;
+      font-size: 0.9rem;
+      color: #4a3f35;
+      outline: none;
+      cursor: pointer;
+      flex: 1;
+    }
 
-      .search-bar {
-        display: flex;
-        gap: 10px;
-      }
-      .search-input {
-        flex: 1;
-        padding: 6px 14px;
-        border: 1px solid #ddd;
-        border-radius: 24px;
-        font-size: 1rem;
-        background: white;
-        outline: none;
-        transition: border-color 0.2s;
-      }
-      .search-input:focus {
-        border-color: #b08968;
-      }
-      .filter-fav {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 24px;
-        padding: 0 14px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        user-select: none;
-        white-space: nowrap;
-        color: #666;
-      }
-      .filter-fav.active {
-        background: #fff8e7;
-        border-color: #e0b86b;
-        color: #b08968;
-      }
-      .filter-fav .star-icon {
-        font-size: 1.2rem;
-      }
+    .search-bar {
+      display: flex;
+      gap: 10px;
+    }
+    .search-input {
+      flex: 1;
+      padding: 6px 14px;
+      border: 1px solid #ddd;
+      border-radius: 24px;
+      font-size: 1rem;
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus {
+      border-color: #b08968;
+    }
+    .filter-fav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 24px;
+      padding: 0 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      color: #666;
+    }
+    .filter-fav.active {
+      background: #fff8e7;
+      border-color: #e0b86b;
+      color: #b08968;
+    }
+    .filter-fav .star-icon { font-size: 1.2rem; }
 
-      .scroll-container {
-        position: fixed;
-        top: 100px;
-        bottom: 60px;
-        left: 0;
-        right: 0;
-        overflow-y: auto;
-        padding: 0 16px;
-        -webkit-overflow-scrolling: touch;
-      }
+    .scroll-container {
+      position: fixed;
+      top: 100px;
+      bottom: 60px;
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      padding: 0 16px;
+      -webkit-overflow-scrolling: touch;
+    }
 
-      .line-card {
-        background: white;
-        border-radius: 18px;
-        padding: 16px 16px 10px;
-        margin-bottom: 16px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-        transition: all 0.2s ease;
-        position: relative;
-        touch-action: pan-y;
-      }
-      .romaji {
-        font-size: 0.95rem;
-        color: #7a6e64;
-        margin-bottom: 6px;
-        font-style: italic;
-        letter-spacing: 0.02em;
-      }
-      .japanese {
-        font-size: 1.1rem;
-        font-weight: 500;
-        margin-bottom: 0px;
-        line-height: 1.8;
-      }
-      .japanese ruby {
-        ruby-align: center;
-      }
-      .japanese rt {
-        font-size: 0.55em;
-        color: #7a6e64;
-        user-select: none;
-      }
-      .chinese {
-        font-size: 0.9rem;
-        color: #2aa198;
-        margin-bottom: 8px;
-      }
+    .line-card {
+      background: white;
+      border-radius: 18px;
+      padding: 16px 16px 10px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
+      position: relative;
+      touch-action: pan-y;
+    }
+    .romaji {
+      font-size: 0.95rem;
+      color: #7a6e64;
+      margin-bottom: 6px;
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+    .japanese {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0px;
+      line-height: 1.8;
+    }
+    .japanese ruby { ruby-align: center; }
+    .japanese rt {
+      font-size: 0.55em;
+      color: #7a6e64;
+      user-select: none;
+    }
+    .chinese {
+      font-size: 0.9rem;
+      color: #2aa198;
+      margin-bottom: 8px;
+    }
 
-      .progress-bar {
-        width: 100%;
-        height: 4px;
-        background: #eee;
-        border-radius: 2px;
-        margin-bottom: 10px;
-        appearance: none;
-        -webkit-appearance: none;
-        outline: none;
-        cursor: pointer;
-      }
-      .progress-bar::-webkit-slider-thumb {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: #b08968;
-        border: none;
-        cursor: pointer;
-      }
-      .progress-bar::-moz-range-thumb {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: #b08968;
-        border: none;
-        cursor: pointer;
-      }
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #eee;
+      border-radius: 2px;
+      margin-bottom: 10px;
+      appearance: none;
+      -webkit-appearance: none;
+      outline: none;
+      cursor: pointer;
+    }
+    .progress-bar::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #b08968;
+      border: none;
+      cursor: pointer;
+    }
+    .progress-bar::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #b08968;
+      border: none;
+      cursor: pointer;
+    }
 
-      .controls {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-top: 1px solid #eee;
-        padding-top: 8px;
-      }
-      .left-controls {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .right-controls {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #eee;
+      padding-top: 8px;
+    }
+    .left-controls { display: flex; align-items: center; gap: 8px; }
+    .right-controls { display: flex; align-items: center; gap: 12px; }
 
-      .play-btn {
-        background: none;
-        border: none;
-        font-size: 1.8rem;
-        cursor: pointer;
-        padding: 4px 8px;
-        line-height: 1;
-        color: #b08968;
-        transition: transform 0.1s;
-        min-width: 48px;
-        text-align: center;
-      }
-      .play-btn:active {
-        transform: scale(0.92);
-      }
+    .play-btn {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      line-height: 1;
+      color: #b08968;
+      transition: transform 0.1s;
+      min-width: 48px;
+      text-align: center;
+    }
+    .play-btn:active { transform: scale(0.92); }
 
-      .fav-btn {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 4px;
-        color: #ccc;
-      }
-      .fav-btn.active {
-        color: #f0b400;
-      }
+    .fav-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 4px;
+      color: #ccc;
+    }
+    .fav-btn.active { color: #f0b400; }
 
-      .loop-toggle {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 0.85rem;
-        color: #999;
-        cursor: pointer;
-        user-select: none;
-        background: none;
-        border: 1px solid transparent;
-        padding: 4px 10px;
-        border-radius: 20px;
-      }
-      .loop-toggle.active {
-        color: #b08968;
-        border-color: #b08968;
-        background: #faf3ed;
-        font-weight: 500;
-      }
-      .loop-icon {
-        font-size: 1.2rem;
-      }
+    .loop-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      color: #999;
+      cursor: pointer;
+      user-select: none;
+      background: none;
+      border: 1px solid transparent;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .loop-toggle.active {
+      color: #b08968;
+      border-color: #b08968;
+      background: #faf3ed;
+      font-weight: 500;
+    }
+    .loop-icon { font-size: 1.2rem; }
 
-      .speed-trigger {
-        background: none;
-        border: 1px solid #ddd;
-        font-size: 0.85rem;
-        color: #666;
-        cursor: pointer;
-        padding: 4px 10px;
-        border-radius: 20px;
-        background: white;
-        position: relative;
-      }
-      .speed-trigger:hover {
-        border-color: #bbb;
-      }
+    .speed-trigger {
+      background: none;
+      border: 1px solid #ddd;
+      font-size: 0.85rem;
+      color: #666;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: white;
+      position: relative;
+    }
+    .speed-trigger:hover { border-color: #bbb; }
 
-      .line-card.playing {
-        box-shadow: 0 0 0 2px #d9b99b;
-      }
+    .line-card.playing {
+      box-shadow: 0 0 0 2px #d9b99b;
+    }
 
-      .speed-menu {
-        position: fixed;
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        z-index: 200;
-        list-style: none;
-        min-width: 80px;
-        padding: 4px 0;
-        display: none;
-      }
-      .speed-menu.open {
-        display: block;
-      }
-      .speed-menu li {
-        padding: 10px 20px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        color: #333;
-        text-align: center;
-      }
-      .speed-menu li:hover {
-        background: #f5f0eb;
-      }
-      .speed-menu li.active {
-        color: #b08968;
-        font-weight: 600;
-      }
+    .speed-menu {
+      position: fixed;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      z-index: 200;
+      list-style: none;
+      min-width: 80px;
+      padding: 4px 0;
+      display: none;
+    }
+    .speed-menu.open { display: block; }
+    .speed-menu li {
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #333;
+      text-align: center;
+    }
+    .speed-menu li:hover { background: #f5f0eb; }
+    .speed-menu li.active { color: #b08968; font-weight: 600; }
 
-      .global-controls {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: white;
-        border-top: 1px solid #e0d6cc;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-        padding: 8px 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        z-index: 100;
-        height: 60px;
-      }
-      .global-info {
-        display: flex;
-        align-items: center;
-        flex: 1;
-        min-width: 0;
-      }
-      .now-playing {
-        font-size: 0.9rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 140px;
-        color: #4a3f35;
-      }
-      .global-buttons {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .global-btn {
-        background: none;
-        border: none;
-        font-size: 1.4rem;
-        cursor: pointer;
-        padding: 4px;
-        color: #b08968;
-      }
-      .global-btn.small-text {
-        font-size: 0.9rem;
-      }
-      .auto-play-btn {
-        font-size: 0.85rem;
-        color: #999;
-        background: none;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        padding: 4px 10px;
-        cursor: pointer;
-      }
-      .auto-play-btn.active {
-        background: #faf3ed;
-        border-color: #b08968;
-        color: #b08968;
-        font-weight: 500;
-      }
-      .ab-btn {
-        font-size: 0.85rem;
-        color: #999;
-        background: none;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        padding: 4px 10px;
-        cursor: pointer;
-      }
-      .ab-btn.active {
-        background: #faf3ed;
-        border-color: #b08968;
-        color: #b08968;
-        font-weight: 500;
-      }
+    .global-controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid #e0d6cc;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      height: 60px;
+    }
+    .global-info { display: flex; align-items: center; flex: 1; min-width: 0; }
+    .now-playing {
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 140px;
+      color: #4a3f35;
+    }
+    .global-buttons { display: flex; align-items: center; gap: 8px; }
+    .global-btn {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 4px;
+      color: #b08968;
+    }
+    .global-btn.small-text { font-size: 0.9rem; }
+    .auto-play-btn {
+      font-size: 0.85rem;
+      color: #999;
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+    .auto-play-btn.active {
+      background: #faf3ed;
+      border-color: #b08968;
+      color: #b08968;
+      font-weight: 500;
+    }
+    .ab-btn {
+      font-size: 0.85rem;
+      color: #999;
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+    .ab-btn.active {
+      background: #faf3ed;
+      border-color: #b08968;
+      color: #b08968;
+      font-weight: 500;
+    }
 
-      .toast {
-        position: fixed;
-        bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 8px 20px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        z-index: 200;
-        opacity: 0;
-        transition: opacity 0.3s;
-        pointer-events: none;
-      }
-      .toast.show {
-        opacity: 1;
-      }
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      z-index: 200;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
 
-      mark {
-        background: #ffeb99;
-        padding: 0 2px;
-        border-radius: 2px;
-      }
-      .no-result {
-        text-align: center;
-        padding: 40px;
-        color: #888;
-      }
-    </style>
-  </head>
-  <body>
-    <audio id="bgAudio" playsinline webkit-playsinline preload="auto"></audio>
+    mark {
+      background: #ffeb99;
+      padding: 0 2px;
+      border-radius: 2px;
+    }
+    .no-result {
+      text-align: center;
+      padding: 40px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgAudio" playsinline webkit-playsinline preload="auto"></audio>
 
-    <div class="header">
-      <div class="top-row">
-        <select id="episodeSelect" class="episode-select">
-          <option value="ep1">第一集</option>
-          <option value="ep6">第六集</option>
-          <!-- 以后新增剧集只需在这里加 option -->
-        </select>
-      </div>
-      <div class="search-bar">
-        <input
-          type="text"
-          class="search-input"
-          id="searchInput"
-          placeholder="搜索罗马音 / 日文 / 中文..."
-        />
-        <div class="filter-fav" id="filterFavBtn">
-          <span class="star-icon">⭐</span>
-        </div>
+  <div class="header">
+    <div class="top-row">
+      <select id="episodeSelect" class="episode-select">
+        <option value="ep1">第一集</option>
+        <option value="ep6">第六集</option>
+        <!-- 以后新增剧集只需在这里加 option，并确保 EPISODE_DATA 有对应键 -->
+      </select>
+    </div>
+    <div class="search-bar">
+      <input type="text" class="search-input" id="searchInput" placeholder="搜索罗马音 / 日文 / 中文...">
+      <div class="filter-fav" id="filterFavBtn">
+        <span class="star-icon">⭐</span>
       </div>
     </div>
+  </div>
 
-    <div class="scroll-container" id="scrollContainer">
-      <div id="lines-container"></div>
+  <div class="scroll-container" id="scrollContainer">
+    <div id="lines-container"></div>
+  </div>
+
+  <div class="global-controls" id="globalControls">
+    <div class="global-info">
+      <span class="now-playing" id="nowPlayingText">未播放</span>
     </div>
-
-    <div class="global-controls" id="globalControls">
-      <div class="global-info">
-        <span class="now-playing" id="nowPlayingText">未播放</span>
-      </div>
-      <div class="global-buttons">
-        <button class="global-btn" id="prevBtn">⏮</button>
-        <button class="global-btn" id="playPauseBtn">▶</button>
-        <button class="global-btn" id="nextBtn">⏭</button>
-        <button class="speed-trigger" id="globalSpeedTrigger">1x</button>
-        <button class="auto-play-btn" id="autoPlayBtn">自动</button>
-        <button class="ab-btn" id="abBtn">A-B</button>
-      </div>
+    <div class="global-buttons">
+      <button class="global-btn" id="prevBtn">⏮</button>
+      <button class="global-btn" id="playPauseBtn">▶</button>
+      <button class="global-btn" id="nextBtn">⏭</button>
+      <button class="speed-trigger" id="globalSpeedTrigger">1x</button>
+      <button class="auto-play-btn" id="autoPlayBtn">自动</button>
+      <button class="ab-btn" id="abBtn">A-B</button>
     </div>
+  </div>
 
-    <ul class="speed-menu" id="speedMenu">
-      <li data-speed="1">1x</li>
-      <li data-speed="1.25">1.25x</li>
-      <li data-speed="1.5">1.5x</li>
-      <li data-speed="2">2x</li>
-      <li data-speed="0.75">0.75x</li>
-    </ul>
+  <ul class="speed-menu" id="speedMenu">
+    <li data-speed="1">1x</li>
+    <li data-speed="1.25">1.25x</li>
+    <li data-speed="1.5">1.5x</li>
+    <li data-speed="2">2x</li>
+    <li data-speed="0.75">0.75x</li>
+  </ul>
 
-    <div class="toast" id="toast"></div>
+  <div class="toast" id="toast"></div>
 
-    <script>
-      (function () {
-        const container = document.getElementById("lines-container");
-        const scrollContainer = document.getElementById("scrollContainer");
-        const searchInput = document.getElementById("searchInput");
-        const filterFavBtn = document.getElementById("filterFavBtn");
-        const nowPlayingText = document.getElementById("nowPlayingText");
-        const playPauseBtn = document.getElementById("playPauseBtn");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
-        const globalSpeedTrigger =
-          document.getElementById("globalSpeedTrigger");
-        const autoPlayBtn = document.getElementById("autoPlayBtn");
-        const abBtn = document.getElementById("abBtn");
-        const speedMenu = document.getElementById("speedMenu");
-        const toast = document.getElementById("toast");
-        const bgAudio = document.getElementById("bgAudio");
-        const episodeSelect = document.getElementById("episodeSelect");
+  <script>
+    // ========== 将你的台词数据直接粘贴到此处 ==========
+    const EPISODE_DATA = {
+      ep1: [
+  {
+    "romaji": "Chigau kore wa terepashī de wa nai",
+    "japanese": "違（ちが）う これはテレパシーではない",
+    "chinese": "不 这不是心电感应",
+    "audio": "audio/line001.mp3"
+  },
+  {
+    "romaji": "Demo kore de nan kai me da",
+    "japanese": "でも これで何回目（なんかいめ）だ",
+    "chinese": "但这已经是第几次了",
+    "audio": "audio/line002.mp3"
+  },
+  {
+    "romaji": "Yume de au no wa jūroku kai me da yo",
+    "japanese": "夢（ゆめ）で会（あ）うのは16回目（じゅうろくかいめ）だよ",
+    "chinese": "我们在梦里相见已经是第16次了",
+    "audio": "audio/line003.mp3"
+  },
+  {
+    "romaji": "Dōse kimi wa wasureru darō ga ne",
+    "japanese": "どうせ君（きみ）は忘（わす）れるだろうがね",
+    "chinese": "反正你还是会忘记的吧",
+    "audio": "audio/line004.mp3"
+  },
+  {
+    "romaji": "Shikashi genjitsu sekai no Migī to wa nite mo nitsukanu sugata da na",
+    "japanese": "しかし 現実世界（げんじつせかい）のミギーとは似（に）ても似（に）つかない姿（すがた）だな",
+    "chinese": "可是你跟现实世界中的米奇长得一点都不像",
+    "audio": "audio/line005.mp3"
+  },
+  {
+    "romaji": "Kimi wa maikai onaji koto o iu",
+    "japanese": "君（きみ）は毎回（まいかい）同（おな）じことを言（い）う",
+    "chinese": "你每次都会说同样的话",
+    "audio": "audio/line006.mp3"
+  },
+  {
+    "romaji": "Watashi datte kimi ga genjitsu sekai no Shin'ichi no katachi ni wa mienai zo",
+    "japanese": "私（わたし）だって君（きみ）が現実世界（げんじつせかい）のシンイチの形（かたち）には見（み）えないぞ",
+    "chinese": "在我看来你和现实世界的新一长得也不一样",
+    "audio": "audio/line007.mp3"
+  },
+  {
+    "romaji": "Nanda mō iku no ka",
+    "japanese": "なんだ もう行（い）くのか",
+    "chinese": "怎么了 你这就要走了吗",
+    "audio": "audio/line008.mp3"
+  },
+  {
+    "romaji": "Kimi no karada ni tokekonda watashi no sanjū pāsento no saibō-tachi to wa",
+    "japanese": "君（きみ）の体（からだ）に溶（と）けこんだ私（わたし）の30％の細胞（さいぼう）たちとは",
+    "chinese": "我融入你体内的那30%的细胞",
+    "audio": "audio/line009.mp3"
+  },
+  {
+    "romaji": "Dō yatte mo renraku dekinai koto ga wakatta",
+    "japanese": "どうやっても連絡（れんらく）できないことがわかった",
+    "chinese": "无论如何也联系不上了",
+    "audio": "audio/line010.mp3"
+  },
+  {
+    "romaji": "Kore ijō yume no naka de atte mo shōganai",
+    "japanese": "これ以上（いじょう）夢（ゆめ）の中（なか）で会（あ）ってもしょうがない",
+    "chinese": "再在梦里相见也解决不了问题了",
+    "audio": "audio/line011.mp3"
+  },
+  {
+    "romaji": "Daiichi ima",
+    "japanese": "第一（だいいち）いま",
+    "chinese": "况且现在现实世界中我们的处境可不容乐观",
+    "audio": "audio/line012.mp3"
+  },
+  {
+    "romaji": " genjitsu no sekai de wareware wa nonbiri shite irarenai jōkyō nanda ze",
+    "japanese": "現実（げんじつ）の世界（せかい）で我々（われわれ）はのんびりしていられない状況（じょうきょう）なんだぜ",
+    "chinese": "况且现在现实世界中我们的处境可不容乐观",
+    "audio": "audio/line013.mp3"
+  },
+  {
+    "romaji": " nonbiri shite irarenai jōkyō nanda ze",
+    "japanese": "のんびりしていられない状況（じょうきょう）なんだぜ",
+    "chinese": "况且现在现实世界中我们的处境可不容乐观",
+    "audio": "audio/line014.mp3"
+  },
+  {
+    "romaji": "Sō dakke",
+    "japanese": "そうだっけ",
+    "chinese": "是吗",
+    "audio": "audio/line015.mp3"
+  },
+  {
+    "romaji": "Mezamereba omoidasu yo",
+    "japanese": "目覚（めざ）めれば思（おも）い出（だ）すよ",
+    "chinese": "你醒了之后就会想起来了",
+    "audio": "audio/line016.mp3"
+  }
+]
+  ,
+      ep6: [
+  {
+    "romaji": "Damatte iyou ka to omotta ga yahari hanasu koto ni shita",
+    "japanese": "黙（だま）っていようかと思（おも）ったが やはり話（はな）すことにした",
+    "chinese": "虽然我本想瞒着你的 但我还是决定告诉你",
+    "audio": "audio/line001.mp3"
+  },
+  {
+    "romaji": "Jūyō na koto da",
+    "japanese": "重要（じゅうよう）なことだ",
+    "chinese": "是一件十分重要的事",
+    "audio": "audio/line002.mp3"
+  },
+  {
+    "romaji": "Kimi ga nikushin no koto o omou kokoro wa totemo tsuyoi mono da",
+    "japanese": "きみが肉親（にくしん）のことを思（おも）う心（こころ）はとても強（つよ）いものだ",
+    "chinese": "你对父母的牵挂非常强烈",
+    "audio": "audio/line003.mp3"
+  },
+  {
+    "romaji": "Sore ni kurabe watashi no koto o karuku",
+    "japanese": "それに比（くら）べ 私（わたし）のことを軽（かる）く",
+    "chinese": "与此相比 我在你心里显得轻如鸿毛",
+    "audio": "audio/line004.mp3"
+  },
+  {
+    "romaji": "Iya mushiro yakkaimono da to omotteiru koto mo shitteiru",
+    "japanese": "いや むしろ厄介者（やっかいもの）だと思（おも）っていることも知（し）っている",
+    "chinese": "不 甚至被当成了累赘",
+    "audio": "audio/line005.mp3"
+  },
+  {
+    "romaji": "Wareware wa mikata de aru to dōji ni",
+    "japanese": "我々（われわれ）は味方（みかた）であると同時（どうじ）に",
+    "chinese": "我们是同伴的同时",
+    "audio": "audio/line006.mp3"
+  },
+  {
+    "romaji": "Shu no chigau teki dōshi to ieru no kamo shirenai",
+    "japanese": "種（しゅ）の違（ちが）う敵同士（てきどうし）と言（い）えるのかもしれない",
+    "chinese": "也可以说是异族的敌人",
+    "audio": "audio/line007.mp3"
+  },
+  {
+    "romaji": "Nani ga iitai",
+    "japanese": "何（なに）が言（い）いたい",
+    "chinese": "你想说什么",
+    "audio": "audio/line008.mp3"
+  },
+  {
+    "romaji": "Ano hi hakai sareta kimi no karada o shūfuku suru katei ni oite",
+    "japanese": "あの日（ひ） 破壊（はかい）された君（きみ）の体（からだ）を修復（しゅうふく）する過程（かてい）において",
+    "chinese": "那天在修复你受伤的身体的过程中",
+    "audio": "audio/line009.mp3"
+  },
+  {
+    "romaji": "Watashi no karada ni mo henka ga okita",
+    "japanese": "私（わたし）の体（からだ）にも変化（へんか）が起（お）きた",
+    "chinese": "我的身体也发生了变化",
+    "audio": "audio/line010.mp3"
+  },
+  {
+    "romaji": "Henka?",
+    "japanese": "変化（へんか）？",
+    "chinese": "变化？",
+    "audio": "audio/line011.mp3"
+  },
+  {
+    "romaji": "Jakuten da yo",
+    "japanese": "弱点（じゃくてん）だよ",
+    "chinese": "就是弱点",
+    "audio": "audio/line012.mp3"
+  },
+  {
+    "romaji": "Hoka no kisei seibutsu ni nai jakuten ga watashi ni dekite shimattan da",
+    "japanese": "他（ほか）の寄生生物（きせいせいぶつ）にない弱点（じゃくてん）が 私（わたし）にできてしまったんだ",
+    "chinese": "我身上出现了其他寄生生物并不具备的弱点",
+    "audio": "audio/line013.mp3"
+  },
+  {
+    "romaji": "Ichi-nichi no uchi yo-jikan hodo no aida watashi wa kanzen ni nemutte shimau",
+    "japanese": "1日（いちにち）のうち4時間（よじかん）ほどの間（あいだ） 私（わたし）は完全（かんぜん）に眠（ねむ）ってしまう",
+    "chinese": "一天中我会有4个小时左右陷入深度睡眠状态",
+    "audio": "audio/line014.mp3"
+  },
+  {
+    "romaji": "Nanda ima made datte neteta daro",
+    "japanese": "なんだ 今（いま）までだって寝（ね）てただろ",
+    "chinese": "什么啊 你以前也不是一直在睡吗",
+    "audio": "audio/line015.mp3"
+  },
+  {
+    "romaji": "Sō janai",
+    "japanese": "そうじゃない",
+    "chinese": "不一样的",
+    "audio": "audio/line016.mp3"
+  },
+  {
+    "romaji": "Ima made wa nemutteite mo chotto shita koto de me ga sameta",
+    "japanese": "今（いま）までは眠（ねむ）っていてもちょっとしたことで目（め）が覚（さ）めた",
+    "chinese": "以前就算在睡觉 一有风吹草动我就会醒",
+    "audio": "audio/line017.mp3"
+  },
+  {
+    "romaji": "Shin'ichi ga odoroitari kokyū o midashitari",
+    "japanese": "シンイチが驚（おどろ）いたり呼吸（こきゅう）を乱（みだ）したり",
+    "chinese": "你吃惊 呼吸紊乱的时候",
+    "audio": "audio/line018.mp3"
+  },
+  {
+    "romaji": "Arui wa nakama ga sanbyaku-mētoru saki ni arawarete mo da",
+    "japanese": "あるいは 仲間（なかま）が300（さんびゃく）メートル先（さき）に現（あらわ）れてもだ",
+    "chinese": "或者300米以内有同类出现的时候",
+    "audio": "audio/line019.mp3"
+  },
+  {
+    "romaji": "Nakama ga…",
+    "japanese": "仲間（なかま）が…",
+    "chinese": "同类…",
+    "audio": "audio/line020.mp3"
+  },
+  {
+    "romaji": "Sō da",
+    "japanese": "そうだ",
+    "chinese": "没错",
+    "audio": "audio/line021.mp3"
+  },
+  {
+    "romaji": "Shikashi kondo no nemuri wa sōshita antena made ga marude kikanakunaru",
+    "japanese": "しかし今度（こんど）の眠（ねむ）りはそうしたアンテナまでがまるで効（き）かなくなる",
+    "chinese": "但这次的睡眠 就连那些紧急信号都不会起作用",
+    "audio": "audio/line022.mp3"
+  },
+  {
+    "romaji": "Tsumari kono yo-jikan no aida ni teki ga arawarereba",
+    "japanese": "つまりこの4時間（よじかん）の間（あいだ）に敵（てき）が現（あらわ）れれば",
+    "chinese": "也就是说这4小时内如果出现了敌人",
+    "audio": "audio/line023.mp3"
+  },
+  {
+    "romaji": "Subete ga owari to iu koto da",
+    "japanese": "すべてが終（お）わりということだ",
+    "chinese": "就一切都完了",
+    "audio": "audio/line024.mp3"
+  },
+  {
+    "romaji": "Kimi no shinzō o shūfuku suru ni atatte watashi wa chōjikan migiude kara hanareta",
+    "japanese": "君（きみ）の心臓（しんぞう）を修復（しゅうふく）するにあたって 私（わたし）は長時間（ちょうじかん）右腕（みぎうで）から離（はな）れた",
+    "chinese": "修复你的心脏的时候 我曾长时间离开了你的右臂",
+    "audio": "audio/line025.mp3"
+  },
+  {
+    "romaji": "Sono kekka taishitsu ga shōshō kawatte shimattan da yo",
+    "japanese": "その結果（けっか） 体質（たいしつ）が少々（しょうしょう）変（か）わってしまったんだよ",
+    "chinese": "结果导致我的体质发生了一点变化",
+    "audio": "audio/line026.mp3"
+  },
+  {
+    "romaji": "Nande sonna daiji na koto damattetan da yo",
+    "japanese": "なんでそんな大事（だいじ）なこと黙（だま）ってたんだよ",
+    "chinese": "为什么这么重要的事情不早告诉我",
+    "audio": "audio/line027.mp3"
+  },
+  {
+    "romaji": "Kimi wa hahaoya o korosarete",
+    "japanese": "君（きみ）は母親（ははおや）を殺（ころ）されて",
+    "chinese": "你母亲被杀",
+    "audio": "audio/line028.mp3"
+  },
+  {
+    "romaji": "Kisei seibutsu no nakama de aru watashi ni tsuyoi tekii o motta yō da na",
+    "japanese": "寄生生物（きせいせいぶつ）の仲間（なかま）である私（わたし）に強（つよ）い敵意（てきい）を持（も）ったようだな",
+    "chinese": "我身为寄生生物的同类 你好像对我敌意很大",
+    "audio": "audio/line029.mp3"
+  },
+  {
+    "romaji": "Jibun no jakuten o teki ni oshieru no wa hijō ni kiken na koto da",
+    "japanese": "自分（じぶん）の弱点（じゃくてん）を敵（てき）に教（おし）えるのは非常（ひじょう）に危険（きけん）なことだ",
+    "chinese": "将自己的弱点告诉敌人是及其危险的",
+    "audio": "audio/line030.mp3"
+  },
+  {
+    "romaji": "Dakara ima made damatteita",
+    "japanese": "だから今（いま）まで黙（だま）っていた",
+    "chinese": "所以我才会瞒你到现在",
+    "audio": "audio/line031.mp3"
+  },
+  {
+    "romaji": "Da ga kimi ni shitte oite morawanakereba sara ni",
+    "japanese": "だが君（きみ）に知（し）っておいてもらわなければ さらに",
+    "chinese": "但如果什么都不告诉你",
+    "audio": "audio/line032.mp3"
+  },
+  {
+    "romaji": "Yori issō kiken da to handan shita wake da",
+    "japanese": "より一層危険（いっそうきけん）だと判断（はんだん）したわけだ",
+    "chinese": "就会陷入更加危险的境地",
+    "audio": "audio/line033.mp3"
+  },
+  {
+    "romaji": "Wakatta ka ne",
+    "japanese": "わかったかね",
+    "chinese": "你明白了吗",
+    "audio": "audio/line034.mp3"
+  },
+  {
+    "romaji": "Ore wa mō Migī no koto o teki da nante omottenai yo",
+    "japanese": "俺（おれ）はもうミギーのことを敵（てき）だなんて思（おも）ってないよ",
+    "chinese": "我已经不把你当成敌人了",
+    "audio": "audio/line035.mp3"
+  },
+  {
+    "romaji": "Inochi no onjin da mon na",
+    "japanese": "命（いのち）の恩人（おんじん）だもんな",
+    "chinese": "毕竟你救了我一命",
+    "audio": "audio/line036.mp3"
+  },
+  {
+    "romaji": "Sono iikata wa seikaku janai na",
+    "japanese": "その言（い）い方（かた）は正確（せいかく）じゃないな",
+    "chinese": "你的说法并不准确",
+    "audio": "audio/line037.mp3"
+  },
+  {
+    "romaji": "Watashi no tame no inochi demo aru",
+    "japanese": "わたしのための命（いのち）でもある",
+    "chinese": "我也是为了救我自己",
+    "audio": "audio/line038.mp3"
+  }
+]
+    };
+    // ========== 数据部分结束 ==========
 
-        let allLines = [];
-        let filteredLines = [];
-        let currentAudioId = null;
-        const loopStates = {};
-        let currentSpeed = 1;
-        const SPEEDS = [1, 1.25, 1.5, 2, 0.75];
-        let autoPlay = false;
-        let favorites = new Set();
-        let abActive = false,
-          abPhase = null,
-          pointA = 0,
-          pointB = 0,
-          abAudioId = null;
-        let progressTimer = null;
+    (function() {
+      const container = document.getElementById('lines-container');
+      const scrollContainer = document.getElementById('scrollContainer');
+      const searchInput = document.getElementById('searchInput');
+      const filterFavBtn = document.getElementById('filterFavBtn');
+      const nowPlayingText = document.getElementById('nowPlayingText');
+      const playPauseBtn = document.getElementById('playPauseBtn');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const globalSpeedTrigger = document.getElementById('globalSpeedTrigger');
+      const autoPlayBtn = document.getElementById('autoPlayBtn');
+      const abBtn = document.getElementById('abBtn');
+      const speedMenu = document.getElementById('speedMenu');
+      const toast = document.getElementById('toast');
+      const bgAudio = document.getElementById('bgAudio');
+      const episodeSelect = document.getElementById('episodeSelect');
 
-        // ---------- 音频路径转换：将旧格式 line001.mp3 转为新格式 line_001.mp3 ----------
-        function normalizeAudioPath(path) {
-          // 匹配最后一个斜杠后的文件名，替换规则：line+数字 => line_数字 (不区分大小写)
-          return path.replace(/\/([^/]+)$/, (match, filename) => {
-            const newName = filename.replace(
-              /^(line)(\d+)\.mp3$/i,
-              "line_$2.mp3",
-            );
-            return "/" + newName;
-          });
-        }
+      let allLines = [];
+      let filteredLines = [];
+      let currentAudioId = null;
+      const loopStates = {};
+      let currentSpeed = 1;
+      const SPEEDS = [1, 1.25, 1.5, 2, 0.75];
+      let autoPlay = false;
+      let favorites = new Set();
+      let abActive = false, abPhase = null, pointA = 0, pointB = 0, abAudioId = null;
+      let progressTimer = null;
 
-        function savePreferences() {
-          try {
-            localStorage.setItem(
-              "nihongo_player_prefs",
-              JSON.stringify({
-                speed: currentSpeed,
-                autoPlay: autoPlay,
-                favorites: Array.from(favorites),
-                episode: episodeSelect.value,
-              }),
-            );
-          } catch (e) {}
+      // 音频路径规范化：确保以 "line_" 开头（小写）并补全子目录
+      function normalizeAudioPath(path, episode) {
+        // 先确保文件名是 line_数字.mp3 的格式
+        let fixed = path.replace(/\/([^/]+)$/, (match, filename) => {
+          return '/' + filename.replace(/^(line)(\d+)\.mp3$/i, 'line_$2.mp3');
+        });
+        // 如果没有包含 /episode/ 子目录，自动插入
+        if (!fixed.includes(`/${episode}/`)) {
+          fixed = fixed.replace(/^(audio\/)/, `$1${episode}/`);
         }
-        function loadPreferences() {
-          try {
-            const raw = localStorage.getItem("nihongo_player_prefs");
-            if (raw) {
-              const p = JSON.parse(raw);
-              if (p.speed && SPEEDS.includes(p.speed)) currentSpeed = p.speed;
-              if (typeof p.autoPlay === "boolean") autoPlay = p.autoPlay;
-              if (Array.isArray(p.favorites)) favorites = new Set(p.favorites);
-              if (p.episode) episodeSelect.value = p.episode;
-            }
-          } catch (e) {}
-        }
+        return fixed;
+      }
 
-        // 加载指定剧集的 JSON 数据
-        function loadEpisode(ep) {
-          stopCurrent();
-          container.innerHTML = '<div class="no-result">加载中...</div>';
-          fetch(`data/${ep}.json`)
-            .then((res) => (res.ok ? res.json() : Promise.reject("加载失败")))
-            .then((data) => {
-              if (!Array.isArray(data)) throw new Error("格式错误");
-
-              // 转换所有台词中的音频路径为新格式
-              const currentEp = ep; // 当前剧集标识，例如 "ep6"
-              allLines = data.map((line) => {
-                let audioPath = line.audio;
-                // 如果路径没有包含 /ep6/ 这样的子目录，自动补充
-                if (!audioPath.includes(`/${currentEp}/`)) {
-                  // 将路径拆分为目录和文件名，然后在 audio/ 后插入 ep6/
-                  audioPath = audioPath.replace(
-                    /^(audio\/)/,
-                    `$1${currentEp}/`,
-                  );
-                }
-                return {
-                  ...line,
-                  audio: normalizeAudioPath(audioPath),
-                };
-              });
-
-              allLines.forEach((line) => {
-                if (!(line.audio in loopStates)) loopStates[line.audio] = false;
-              });
-              applyFilter();
-              savePreferences();
-            })
-            .catch((err) => {
-              container.innerHTML =
-                '<div class="no-result">❌ 数据加载失败，请检查文件</div>';
-              console.error(err);
-            });
-        }
-
-        function escapeHtml(text) {
-          return String(text)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-        }
-        function formatJapanese(text) {
-          return text.replace(
-            /([\u4e00-\u9fff\u3400-\u4dbf]+)（([\u3040-\u309f\u30a0-\u30ff]+)）/g,
-            "<ruby>$1<rt>$2</rt></ruby>",
-          );
-        }
-        function highlightText(text, keyword) {
-          if (!keyword.trim()) return escapeHtml(text);
-          const esc = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-          return escapeHtml(text).replace(
-            new RegExp(`(${esc})`, "gi"),
-            "<mark>$1</mark>",
-          );
-        }
-        function showToast(msg) {
-          toast.textContent = msg;
-          toast.classList.add("show");
-          clearTimeout(toast._timeout);
-          toast._timeout = setTimeout(
-            () => toast.classList.remove("show"),
-            1500,
-          );
-        }
-        function getLineByAudioId(id) {
-          return allLines.find((l) => l.audio === id);
-        }
-        function getNextIndex(id) {
-          const idx = filteredLines.findIndex((l) => l.audio === id);
-          if (idx === -1) return -1;
-          return idx < filteredLines.length - 1 ? idx + 1 : 0;
-        }
-        function getPrevIndex(id) {
-          const idx = filteredLines.findIndex((l) => l.audio === id);
-          if (idx === -1) return -1;
-          return idx > 0 ? idx - 1 : filteredLines.length - 1;
-        }
-
-        function updateAllSpeedDisplay() {
-          const txt = currentSpeed + "x";
-          globalSpeedTrigger.textContent = txt;
-          document.querySelectorAll(".speed-trigger").forEach((btn) => {
-            if (btn !== globalSpeedTrigger) btn.textContent = txt;
-          });
-          document.querySelectorAll("#speedMenu li").forEach((li) => {
-            li.classList.toggle(
-              "active",
-              parseFloat(li.dataset.speed) === currentSpeed,
-            );
-          });
-        }
-        function setSpeed(speed) {
-          if (speed === currentSpeed) return;
-          currentSpeed = speed;
-          updateAllSpeedDisplay();
-          if (bgAudio && !bgAudio.paused) bgAudio.playbackRate = currentSpeed;
-          savePreferences();
-        }
-
-        function handleScrollClose() {
-          if (speedMenu.classList.contains("open")) closeSpeedMenu();
-        }
-        function openSpeedMenu(triggerBtn) {
-          const rect = triggerBtn.getBoundingClientRect();
-          speedMenu.style.cssText =
-            "display:block; position:fixed; left:-9999px; top:-9999px;";
-          const menuHeight = speedMenu.offsetHeight;
-          const menuWidth = speedMenu.offsetWidth;
-          speedMenu.style.cssText = "";
-          let top = rect.top - menuHeight - 4;
-          let left = rect.left;
-          if (top < 10) top = rect.bottom + 4;
-          if (left + menuWidth > window.innerWidth)
-            left = window.innerWidth - menuWidth - 10;
-          speedMenu.style.top = top + "px";
-          speedMenu.style.left = left + "px";
-          speedMenu.classList.add("open");
-          updateAllSpeedDisplay();
-          scrollContainer.addEventListener("scroll", handleScrollClose, {
-            passive: true,
-          });
-        }
-        function closeSpeedMenu() {
-          speedMenu.classList.remove("open");
-          scrollContainer.removeEventListener("scroll", handleScrollClose);
-        }
-
-        function startProgressUpdater() {
-          stopProgressUpdater();
-          progressTimer = setInterval(() => {
-            if (bgAudio && !bgAudio.paused && bgAudio.duration) {
-              const pct = (bgAudio.currentTime / bgAudio.duration) * 100;
-              const card = document.querySelector(
-                `.line-card[data-audio-id="${currentAudioId}"]`,
-              );
-              if (card) {
-                const bar = card.querySelector(".progress-bar");
-                if (bar && !bar.matches(":active")) bar.value = pct;
-              }
-            }
-          }, 200);
-        }
-        function stopProgressUpdater() {
-          if (progressTimer) {
-            clearInterval(progressTimer);
-            progressTimer = null;
+      function savePreferences() {
+        try {
+          localStorage.setItem('nihongo_player_prefs', JSON.stringify({
+            speed: currentSpeed,
+            autoPlay: autoPlay,
+            favorites: Array.from(favorites),
+            episode: episodeSelect.value
+          }));
+        } catch (e) {}
+      }
+      function loadPreferences() {
+        try {
+          const raw = localStorage.getItem('nihongo_player_prefs');
+          if (raw) {
+            const p = JSON.parse(raw);
+            if (p.speed && SPEEDS.includes(p.speed)) currentSpeed = p.speed;
+            if (typeof p.autoPlay === 'boolean') autoPlay = p.autoPlay;
+            if (Array.isArray(p.favorites)) favorites = new Set(p.favorites);
+            if (p.episode) episodeSelect.value = p.episode;
           }
-        }
+        } catch (e) {}
+      }
 
-        function stopCurrent(resetProgress = true) {
-          if (bgAudio) {
+      // 加载指定剧集的数据（从内置对象）
+      function loadEpisode(ep) {
+        stopCurrent();
+        const data = EPISODE_DATA[ep];
+        if (!data || !Array.isArray(data)) {
+          container.innerHTML = '<div class="no-result">❌ 数据不存在，请检查 EPISODE_DATA</div>';
+          return;
+        }
+        // 拷贝一份数据并修正音频路径
+        allLines = data.map(line => ({
+          ...line,
+          audio: normalizeAudioPath(line.audio, ep)
+        }));
+        allLines.forEach(line => {
+          if (!(line.audio in loopStates)) loopStates[line.audio] = false;
+        });
+        applyFilter();
+        savePreferences();
+      }
+
+      function escapeHtml(text) {
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+      }
+      function formatJapanese(text) {
+        return text.replace(/([\u4e00-\u9fff\u3400-\u4dbf]+)（([\u3040-\u309f\u30a0-\u30ff]+)）/g, '<ruby>$1<rt>$2</rt></ruby>');
+      }
+      function highlightText(text, keyword) {
+        if (!keyword.trim()) return escapeHtml(text);
+        const esc = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return escapeHtml(text).replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
+      }
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => toast.classList.remove('show'), 1500);
+      }
+      function getLineByAudioId(id) { return allLines.find(l => l.audio === id); }
+      function getNextIndex(id) {
+        const idx = filteredLines.findIndex(l => l.audio === id);
+        if (idx === -1) return -1;
+        return idx < filteredLines.length - 1 ? idx + 1 : 0;
+      }
+      function getPrevIndex(id) {
+        const idx = filteredLines.findIndex(l => l.audio === id);
+        if (idx === -1) return -1;
+        return idx > 0 ? idx - 1 : filteredLines.length - 1;
+      }
+
+      function updateAllSpeedDisplay() {
+        const txt = currentSpeed + 'x';
+        globalSpeedTrigger.textContent = txt;
+        document.querySelectorAll('.speed-trigger').forEach(btn => {
+          if (btn !== globalSpeedTrigger) btn.textContent = txt;
+        });
+        document.querySelectorAll('#speedMenu li').forEach(li => {
+          li.classList.toggle('active', parseFloat(li.dataset.speed) === currentSpeed);
+        });
+      }
+      function setSpeed(speed) {
+        if (speed === currentSpeed) return;
+        currentSpeed = speed;
+        updateAllSpeedDisplay();
+        if (bgAudio && !bgAudio.paused) bgAudio.playbackRate = currentSpeed;
+        savePreferences();
+      }
+
+      function handleScrollClose() {
+        if (speedMenu.classList.contains('open')) closeSpeedMenu();
+      }
+      function openSpeedMenu(triggerBtn) {
+        const rect = triggerBtn.getBoundingClientRect();
+        speedMenu.style.cssText = 'display:block; position:fixed; left:-9999px; top:-9999px;';
+        const menuHeight = speedMenu.offsetHeight;
+        const menuWidth = speedMenu.offsetWidth;
+        speedMenu.style.cssText = '';
+        let top = rect.top - menuHeight - 4;
+        let left = rect.left;
+        if (top < 10) top = rect.bottom + 4;
+        if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth - 10;
+        speedMenu.style.top = top + 'px';
+        speedMenu.style.left = left + 'px';
+        speedMenu.classList.add('open');
+        updateAllSpeedDisplay();
+        scrollContainer.addEventListener('scroll', handleScrollClose, { passive: true });
+      }
+      function closeSpeedMenu() {
+        speedMenu.classList.remove('open');
+        scrollContainer.removeEventListener('scroll', handleScrollClose);
+      }
+
+      function startProgressUpdater() {
+        stopProgressUpdater();
+        progressTimer = setInterval(() => {
+          if (bgAudio && !bgAudio.paused && bgAudio.duration) {
+            const pct = (bgAudio.currentTime / bgAudio.duration) * 100;
+            const card = document.querySelector(`.line-card[data-audio-id="${currentAudioId}"]`);
+            if (card) {
+              const bar = card.querySelector('.progress-bar');
+              if (bar && !bar.matches(':active')) bar.value = pct;
+            }
+          }
+        }, 200);
+      }
+      function stopProgressUpdater() {
+        if (progressTimer) { clearInterval(progressTimer); progressTimer = null; }
+      }
+
+      function stopCurrent(resetProgress = true) {
+        if (bgAudio) {
+          bgAudio.pause();
+          if (resetProgress) bgAudio.currentTime = 0;
+        }
+        if (currentAudioId) {
+          updateCardPlayIcon(currentAudioId, '▶');
+          const card = document.querySelector(`.line-card[data-audio-id="${currentAudioId}"]`);
+          if (card) card.classList.remove('playing');
+          currentAudioId = null;
+        }
+        stopProgressUpdater();
+        updateGlobalNowPlaying('未播放');
+        playPauseBtn.textContent = '▶';
+        clearABActive();
+      }
+
+      function setupMediaSession(line) {
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: line.chinese || line.japanese,
+            artist: '台词播放器',
+            album: '',
+            artwork: []
+          });
+          navigator.mediaSession.setActionHandler('play', () => {
+            if (bgAudio.paused) bgAudio.play();
+          });
+          navigator.mediaSession.setActionHandler('pause', () => {
             bgAudio.pause();
-            if (resetProgress) bgAudio.currentTime = 0;
-          }
-          if (currentAudioId) {
-            updateCardPlayIcon(currentAudioId, "▶");
-            const card = document.querySelector(
-              `.line-card[data-audio-id="${currentAudioId}"]`,
-            );
-            if (card) card.classList.remove("playing");
-            currentAudioId = null;
-          }
-          stopProgressUpdater();
-          updateGlobalNowPlaying("未播放");
-          playPauseBtn.textContent = "▶";
-          clearABActive();
+          });
+          navigator.mediaSession.setActionHandler('previoustrack', playPrev);
+          navigator.mediaSession.setActionHandler('nexttrack', playNext);
         }
+      }
 
-        function setupMediaSession(line) {
-          if ("mediaSession" in navigator) {
-            navigator.mediaSession.metadata = new MediaMetadata({
-              title: line.chinese || line.japanese,
-              artist: "台词播放器",
-              album: "",
-              artwork: [],
-            });
-            navigator.mediaSession.setActionHandler("play", () => {
-              if (bgAudio.paused) bgAudio.play();
-            });
-            navigator.mediaSession.setActionHandler("pause", () => {
-              bgAudio.pause();
-            });
-            navigator.mediaSession.setActionHandler("previoustrack", playPrev);
-            navigator.mediaSession.setActionHandler("nexttrack", playNext);
-          }
-        }
+      function playLine(audioSrc, loop) {
+        stopCurrent(false);
+        bgAudio.src = audioSrc;
+        bgAudio.loop = loop;
+        bgAudio.playbackRate = currentSpeed;
+        bgAudio.play().catch(err => console.warn('播放失败:', err));
 
-        function playLine(audioSrc, loop) {
-          stopCurrent(false);
-          bgAudio.src = audioSrc;
-          bgAudio.loop = loop;
-          bgAudio.playbackRate = currentSpeed;
-          bgAudio.play().catch((err) => console.warn("播放失败:", err));
+        currentAudioId = audioSrc;
+        const card = document.querySelector(`.line-card[data-audio-id="${audioSrc}"]`);
+        if (card) {
+          card.classList.add('playing');
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        updateCardPlayIcon(audioSrc, '⏸');
+        const line = getLineByAudioId(audioSrc);
+        updateGlobalNowPlaying(line ? (line.japanese || line.romaji) : '');
+        playPauseBtn.textContent = '⏸';
+        if (line) setupMediaSession(line);
+        startProgressUpdater();
 
-          currentAudioId = audioSrc;
-          const card = document.querySelector(
-            `.line-card[data-audio-id="${audioSrc}"]`,
-          );
-          if (card) {
-            card.classList.add("playing");
-            card.scrollIntoView({ behavior: "smooth", block: "center" });
-          }
-          updateCardPlayIcon(audioSrc, "⏸");
-          const line = getLineByAudioId(audioSrc);
-          updateGlobalNowPlaying(line ? line.japanese || line.romaji : "");
-          playPauseBtn.textContent = "⏸";
-          if (line) setupMediaSession(line);
-          startProgressUpdater();
-
-          bgAudio.onended = () => {
-            if (!bgAudio.loop) {
-              if (
-                abActive &&
-                currentAudioId === abAudioId &&
-                pointA !== pointB
-              ) {
-                bgAudio.currentTime = pointA;
-                bgAudio.play();
-                return;
-              }
-              const nextIdx = getNextIndex(audioSrc);
-              if (autoPlay && nextIdx !== -1) {
-                const nextLine = filteredLines[nextIdx];
-                playLine(nextLine.audio, loopStates[nextLine.audio] || false);
-              } else {
-                stopCurrent();
-              }
-            }
-          };
-
-          if (abActive && currentAudioId === abAudioId) {
-            bgAudio.ontimeupdate = abTimeUpdateHandler;
-          } else {
-            bgAudio.ontimeupdate = null;
-          }
-        }
-
-        function togglePlayPause() {
-          if (bgAudio && !bgAudio.paused) {
-            bgAudio.pause();
-            playPauseBtn.textContent = "▶";
-            updateCardPlayIcon(currentAudioId, "▶");
-            stopProgressUpdater();
-          } else if (bgAudio && bgAudio.paused) {
-            bgAudio.play();
-            playPauseBtn.textContent = "⏸";
-            updateCardPlayIcon(currentAudioId, "⏸");
-            startProgressUpdater();
-          } else if (filteredLines.length > 0) {
-            const first = filteredLines[0];
-            playLine(first.audio, loopStates[first.audio] || false);
-          }
-        }
-        function playNext() {
-          if (!currentAudioId) return;
-          const idx = getNextIndex(currentAudioId);
-          if (idx !== -1)
-            playLine(
-              filteredLines[idx].audio,
-              loopStates[filteredLines[idx].audio] || false,
-            );
-        }
-        function playPrev() {
-          if (!currentAudioId) return;
-          const idx = getPrevIndex(currentAudioId);
-          if (idx !== -1)
-            playLine(
-              filteredLines[idx].audio,
-              loopStates[filteredLines[idx].audio] || false,
-            );
-        }
-        function updateCardPlayIcon(audioId, icon) {
-          const card = document.querySelector(
-            `.line-card[data-audio-id="${audioId}"]`,
-          );
-          if (card) {
-            const btn = card.querySelector(".play-btn");
-            if (btn) btn.textContent = icon;
-          }
-        }
-        function updateGlobalNowPlaying(text) {
-          nowPlayingText.textContent = text || "未播放";
-        }
-
-        function toggleLoop(audioId, el) {
-          const active = !loopStates[audioId];
-          loopStates[audioId] = active;
-          if (el) {
-            el.classList.toggle("active", active);
-            el.querySelector(".loop-text").textContent = active
-              ? "循环中"
-              : "循环";
-          }
-          if (currentAudioId === audioId) bgAudio.loop = active;
-        }
-
-        function toggleFavorite(audioId, el) {
-          if (favorites.has(audioId)) {
-            favorites.delete(audioId);
-            if (el) el.classList.remove("active");
-          } else {
-            favorites.add(audioId);
-            if (el) el.classList.add("active");
-          }
-          savePreferences();
-          if (filterFavBtn.classList.contains("active")) applyFilter();
-        }
-
-        function abTimeUpdateHandler() {
-          if (!bgAudio || currentAudioId !== abAudioId || !abActive) return;
-          if (bgAudio.currentTime >= pointB) bgAudio.currentTime = pointA;
-        }
-        function clearABActive() {
-          if (abActive) bgAudio.ontimeupdate = null;
-          abActive = false;
-          abPhase = null;
-          abAudioId = null;
-          abBtn.classList.remove("active");
-          abBtn.textContent = "A-B";
-        }
-        function enterABSetMode() {
-          if (!currentAudioId || !bgAudio || bgAudio.paused) {
-            showToast("请先播放一句台词");
-            return;
-          }
-          if (abActive) {
-            clearABActive();
-            return;
-          }
-          abPhase = "setA";
-          abBtn.classList.add("active");
-          abBtn.textContent = "设置A点";
-          showToast("点击进度条设置 A 点");
-        }
-        function handleProgressBarClick(e, audioId) {
-          const bar = e.target;
-          const rect = bar.getBoundingClientRect();
-          const ratio = (e.clientX - rect.left) / rect.width;
-          if (abPhase === "setA" && currentAudioId === audioId) {
-            pointA = (bgAudio.duration || 0) * ratio;
-            abPhase = "setB";
-            abBtn.textContent = "设置B点";
-            showToast("点击进度条设置 B 点");
-            e.preventDefault();
-          } else if (abPhase === "setB" && currentAudioId === audioId) {
-            pointB = (bgAudio.duration || 0) * ratio;
-            if (pointB <= pointA) {
-              showToast("B 点必须大于 A 点");
+        bgAudio.onended = () => {
+          if (!bgAudio.loop) {
+            if (abActive && currentAudioId === abAudioId && pointA !== pointB) {
+              bgAudio.currentTime = pointA;
+              bgAudio.play();
               return;
             }
-            abPhase = null;
-            abActive = true;
-            abAudioId = audioId;
-            abBtn.textContent = "AB中";
-            abBtn.classList.add("active");
-            bgAudio.ontimeupdate = abTimeUpdateHandler;
-            bgAudio.currentTime = pointA;
-            bgAudio.play();
-            showToast("AB 循环已开始");
-            e.preventDefault();
-          } else if (currentAudioId === audioId) {
-            bgAudio.currentTime = (bgAudio.duration || 0) * ratio;
-            bar.value = ratio * 100;
+            const nextIdx = getNextIndex(audioSrc);
+            if (autoPlay && nextIdx !== -1) {
+              const nextLine = filteredLines[nextIdx];
+              playLine(nextLine.audio, loopStates[nextLine.audio] || false);
+            } else {
+              stopCurrent();
+            }
           }
-        }
+        };
 
-        function setupLongPress(card, line) {
-          const textToCopy =
-            line.japanese.replace(/（.*?）/g, "") + "\n" + line.chinese;
-          let timer;
-          card.addEventListener("touchstart", () => {
-            timer = setTimeout(() => {
-              navigator.clipboard
-                .writeText(textToCopy)
-                .then(() => showToast("已复制台词"))
-                .catch(() => showToast("复制失败"));
-            }, 500);
-          });
-          card.addEventListener("touchend", () => clearTimeout(timer));
-          card.addEventListener("touchmove", () => clearTimeout(timer));
-          card.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-            navigator.clipboard
-              .writeText(textToCopy)
-              .then(() => showToast("已复制台词"))
-              .catch(() => showToast("复制失败"));
-          });
+        if (abActive && currentAudioId === abAudioId) {
+          bgAudio.ontimeupdate = abTimeUpdateHandler;
+        } else {
+          bgAudio.ontimeupdate = null;
         }
+      }
 
-        function renderLines(lines) {
-          if (!lines || lines.length === 0) {
-            container.innerHTML = '<div class="no-result">没有匹配的台词</div>';
-            return;
-          }
-          const keyword = searchInput.value.trim();
-          let html = "";
-          lines.forEach((line) => {
-            const audioId = line.audio;
-            const isLoop = loopStates[audioId] || false;
-            const isFav = favorites.has(audioId);
-            html += `
+      function togglePlayPause() {
+        if (bgAudio && !bgAudio.paused) {
+          bgAudio.pause();
+          playPauseBtn.textContent = '▶';
+          updateCardPlayIcon(currentAudioId, '▶');
+          stopProgressUpdater();
+        } else if (bgAudio && bgAudio.paused) {
+          bgAudio.play();
+          playPauseBtn.textContent = '⏸';
+          updateCardPlayIcon(currentAudioId, '⏸');
+          startProgressUpdater();
+        } else if (filteredLines.length > 0) {
+          const first = filteredLines[0];
+          playLine(first.audio, loopStates[first.audio] || false);
+        }
+      }
+      function playNext() {
+        if (!currentAudioId) return;
+        const idx = getNextIndex(currentAudioId);
+        if (idx !== -1) playLine(filteredLines[idx].audio, loopStates[filteredLines[idx].audio] || false);
+      }
+      function playPrev() {
+        if (!currentAudioId) return;
+        const idx = getPrevIndex(currentAudioId);
+        if (idx !== -1) playLine(filteredLines[idx].audio, loopStates[filteredLines[idx].audio] || false);
+      }
+      function updateCardPlayIcon(audioId, icon) {
+        const card = document.querySelector(`.line-card[data-audio-id="${audioId}"]`);
+        if (card) {
+          const btn = card.querySelector('.play-btn');
+          if (btn) btn.textContent = icon;
+        }
+      }
+      function updateGlobalNowPlaying(text) {
+        nowPlayingText.textContent = text || '未播放';
+      }
+
+      function toggleLoop(audioId, el) {
+        const active = !loopStates[audioId];
+        loopStates[audioId] = active;
+        if (el) {
+          el.classList.toggle('active', active);
+          el.querySelector('.loop-text').textContent = active ? '循环中' : '循环';
+        }
+        if (currentAudioId === audioId) bgAudio.loop = active;
+      }
+
+      function toggleFavorite(audioId, el) {
+        if (favorites.has(audioId)) {
+          favorites.delete(audioId);
+          if (el) el.classList.remove('active');
+        } else {
+          favorites.add(audioId);
+          if (el) el.classList.add('active');
+        }
+        savePreferences();
+        if (filterFavBtn.classList.contains('active')) applyFilter();
+      }
+
+      function abTimeUpdateHandler() {
+        if (!bgAudio || currentAudioId !== abAudioId || !abActive) return;
+        if (bgAudio.currentTime >= pointB) bgAudio.currentTime = pointA;
+      }
+      function clearABActive() {
+        if (abActive) bgAudio.ontimeupdate = null;
+        abActive = false; abPhase = null; abAudioId = null;
+        abBtn.classList.remove('active'); abBtn.textContent = 'A-B';
+      }
+      function enterABSetMode() {
+        if (!currentAudioId || !bgAudio || bgAudio.paused) { showToast('请先播放一句台词'); return; }
+        if (abActive) { clearABActive(); return; }
+        abPhase = 'setA';
+        abBtn.classList.add('active'); abBtn.textContent = '设置A点';
+        showToast('点击进度条设置 A 点');
+      }
+      function handleProgressBarClick(e, audioId) {
+        const bar = e.target;
+        const rect = bar.getBoundingClientRect();
+        const ratio = (e.clientX - rect.left) / rect.width;
+        if (abPhase === 'setA' && currentAudioId === audioId) {
+          pointA = (bgAudio.duration || 0) * ratio;
+          abPhase = 'setB'; abBtn.textContent = '设置B点';
+          showToast('点击进度条设置 B 点');
+          e.preventDefault();
+        } else if (abPhase === 'setB' && currentAudioId === audioId) {
+          pointB = (bgAudio.duration || 0) * ratio;
+          if (pointB <= pointA) { showToast('B 点必须大于 A 点'); return; }
+          abPhase = null; abActive = true; abAudioId = audioId;
+          abBtn.textContent = 'AB中'; abBtn.classList.add('active');
+          bgAudio.ontimeupdate = abTimeUpdateHandler;
+          bgAudio.currentTime = pointA;
+          bgAudio.play();
+          showToast('AB 循环已开始');
+          e.preventDefault();
+        } else if (currentAudioId === audioId) {
+          bgAudio.currentTime = (bgAudio.duration || 0) * ratio;
+          bar.value = ratio * 100;
+        }
+      }
+
+      function setupLongPress(card, line) {
+        const textToCopy = line.japanese.replace(/（.*?）/g, '') + '\n' + line.chinese;
+        let timer;
+        card.addEventListener('touchstart', () => {
+          timer = setTimeout(() => {
+            navigator.clipboard.writeText(textToCopy).then(() => showToast('已复制台词')).catch(() => showToast('复制失败'));
+          }, 500);
+        });
+        card.addEventListener('touchend', () => clearTimeout(timer));
+        card.addEventListener('touchmove', () => clearTimeout(timer));
+        card.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          navigator.clipboard.writeText(textToCopy).then(() => showToast('已复制台词')).catch(() => showToast('复制失败'));
+        });
+      }
+
+      function renderLines(lines) {
+        if (!lines || lines.length === 0) {
+          container.innerHTML = '<div class="no-result">没有匹配的台词</div>';
+          return;
+        }
+        const keyword = searchInput.value.trim();
+        let html = '';
+        lines.forEach(line => {
+          const audioId = line.audio;
+          const isLoop = loopStates[audioId] || false;
+          const isFav = favorites.has(audioId);
+          html += `
             <div class="line-card" data-audio-id="${escapeHtml(audioId)}">
               <div class="romaji">${highlightText(line.romaji, keyword)}</div>
               <div class="japanese">${formatJapanese(highlightText(line.japanese, keyword))}</div>
@@ -937,140 +1122,126 @@
               <div class="controls">
                 <div class="left-controls">
                   <button class="play-btn" data-action="play" data-audio-id="${escapeHtml(audioId)}">▶</button>
-                  <button class="fav-btn ${isFav ? "active" : ""}" data-action="fav" data-audio-id="${escapeHtml(audioId)}">${isFav ? "★" : "☆"}</button>
+                  <button class="fav-btn ${isFav ? 'active' : ''}" data-action="fav" data-audio-id="${escapeHtml(audioId)}">${isFav ? '★' : '☆'}</button>
                 </div>
                 <div class="right-controls">
                   <button class="speed-trigger" data-action="speed">${currentSpeed}x</button>
-                  <div class="loop-toggle ${isLoop ? "active" : ""}" data-action="loop" data-audio-id="${escapeHtml(audioId)}" role="button" tabindex="0">
+                  <div class="loop-toggle ${isLoop ? 'active' : ''}" data-action="loop" data-audio-id="${escapeHtml(audioId)}" role="button" tabindex="0">
                     <span class="loop-icon">🔁</span>
-                    <span class="loop-text">${isLoop ? "循环中" : "循环"}</span>
+                    <span class="loop-text">${isLoop ? '循环中' : '循环'}</span>
                   </div>
                 </div>
               </div>
             </div>
           `;
-          });
-          container.innerHTML = html;
-          if (currentAudioId) {
-            const card = container.querySelector(
-              `.line-card[data-audio-id="${currentAudioId}"]`,
-            );
-            if (card) card.classList.add("playing");
+        });
+        container.innerHTML = html;
+        if (currentAudioId) {
+          const card = container.querySelector(`.line-card[data-audio-id="${currentAudioId}"]`);
+          if (card) card.classList.add('playing');
+        }
+        container.addEventListener('click', (e) => {
+          const playBtn = e.target.closest('[data-action="play"]');
+          const loopBtn = e.target.closest('[data-action="loop"]');
+          const speedBtn = e.target.closest('[data-action="speed"]');
+          const favBtn = e.target.closest('[data-action="fav"]');
+          const progBar = e.target.closest('.progress-bar');
+
+          if (playBtn) {
+            const id = playBtn.dataset.audioId;
+            if (currentAudioId === id && bgAudio && !bgAudio.paused) stopCurrent();
+            else playLine(id, loopStates[id] || false);
           }
-          container.addEventListener("click", (e) => {
-            const playBtn = e.target.closest('[data-action="play"]');
-            const loopBtn = e.target.closest('[data-action="loop"]');
-            const speedBtn = e.target.closest('[data-action="speed"]');
-            const favBtn = e.target.closest('[data-action="fav"]');
-            const progBar = e.target.closest(".progress-bar");
-
-            if (playBtn) {
-              const id = playBtn.dataset.audioId;
-              if (currentAudioId === id && bgAudio && !bgAudio.paused)
-                stopCurrent();
-              else playLine(id, loopStates[id] || false);
-            }
-            if (loopBtn) {
-              e.stopPropagation();
-              toggleLoop(loopBtn.dataset.audioId, loopBtn);
-            }
-            if (speedBtn) {
-              e.stopPropagation();
-              openSpeedMenu(speedBtn);
-            }
-            if (favBtn) {
-              e.stopPropagation();
-              toggleFavorite(favBtn.dataset.audioId, favBtn);
-            }
-            if (progBar) {
-              handleProgressBarClick(e, progBar.dataset.audioId);
-            }
-          });
-          container.querySelectorAll(".line-card").forEach((card) => {
-            const audioId = card.dataset.audioId;
-            const line = lines.find((l) => l.audio === audioId);
-            if (line) setupLongPress(card, line);
-          });
-        }
-
-        function applyFilter() {
-          const keyword = searchInput.value.trim().toLowerCase();
-          const onlyFav = filterFavBtn.classList.contains("active");
-          filteredLines = allLines.filter((line) => {
-            if (onlyFav && !favorites.has(line.audio)) return false;
-            if (!keyword) return true;
-            return (
-              line.romaji.toLowerCase().includes(keyword) ||
-              line.japanese.includes(keyword) ||
-              line.chinese.includes(keyword)
-            );
-          });
-          if (
-            currentAudioId &&
-            !filteredLines.some((l) => l.audio === currentAudioId)
-          )
-            stopCurrent();
-          renderLines(filteredLines);
-        }
-
-        document.addEventListener("visibilitychange", () => {
-          if (!document.hidden && bgAudio && bgAudio.paused && currentAudioId) {
-            bgAudio.play().catch(() => {});
+          if (loopBtn) {
+            e.stopPropagation();
+            toggleLoop(loopBtn.dataset.audioId, loopBtn);
+          }
+          if (speedBtn) {
+            e.stopPropagation();
+            openSpeedMenu(speedBtn);
+          }
+          if (favBtn) {
+            e.stopPropagation();
+            toggleFavorite(favBtn.dataset.audioId, favBtn);
+          }
+          if (progBar) {
+            handleProgressBarClick(e, progBar.dataset.audioId);
           }
         });
+        container.querySelectorAll('.line-card').forEach(card => {
+          const audioId = card.dataset.audioId;
+          const line = lines.find(l => l.audio === audioId);
+          if (line) setupLongPress(card, line);
+        });
+      }
 
-        playPauseBtn.addEventListener("click", togglePlayPause);
-        prevBtn.addEventListener("click", playPrev);
-        nextBtn.addEventListener("click", playNext);
-        globalSpeedTrigger.addEventListener("click", (e) => {
-          e.stopPropagation();
-          openSpeedMenu(globalSpeedTrigger);
+      function applyFilter() {
+        const keyword = searchInput.value.trim().toLowerCase();
+        const onlyFav = filterFavBtn.classList.contains('active');
+        filteredLines = allLines.filter(line => {
+          if (onlyFav && !favorites.has(line.audio)) return false;
+          if (!keyword) return true;
+          return line.romaji.toLowerCase().includes(keyword) ||
+                 line.japanese.includes(keyword) ||
+                 line.chinese.includes(keyword);
         });
-        autoPlayBtn.addEventListener("click", () => {
-          autoPlay = !autoPlay;
-          autoPlayBtn.classList.toggle("active", autoPlay);
-          autoPlayBtn.textContent = autoPlay ? "自动✓" : "自动";
-          savePreferences();
-        });
-        abBtn.addEventListener("click", enterABSetMode);
-        searchInput.addEventListener("input", applyFilter);
-        filterFavBtn.addEventListener("click", () => {
-          filterFavBtn.classList.toggle("active");
-          applyFilter();
-        });
+        if (currentAudioId && !filteredLines.some(l => l.audio === currentAudioId)) stopCurrent();
+        renderLines(filteredLines);
+      }
 
-        // 剧集切换
-        episodeSelect.addEventListener("change", () => {
-          loadEpisode(episodeSelect.value);
-        });
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && bgAudio && bgAudio.paused && currentAudioId) {
+          bgAudio.play().catch(() => {});
+        }
+      });
 
-        speedMenu.addEventListener("click", (e) => {
-          const li = e.target.closest("li");
-          if (!li) return;
-          setSpeed(parseFloat(li.dataset.speed));
+      playPauseBtn.addEventListener('click', togglePlayPause);
+      prevBtn.addEventListener('click', playPrev);
+      nextBtn.addEventListener('click', playNext);
+      globalSpeedTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openSpeedMenu(globalSpeedTrigger);
+      });
+      autoPlayBtn.addEventListener('click', () => {
+        autoPlay = !autoPlay;
+        autoPlayBtn.classList.toggle('active', autoPlay);
+        autoPlayBtn.textContent = autoPlay ? '自动✓' : '自动';
+        savePreferences();
+      });
+      abBtn.addEventListener('click', enterABSetMode);
+      searchInput.addEventListener('input', applyFilter);
+      filterFavBtn.addEventListener('click', () => {
+        filterFavBtn.classList.toggle('active');
+        applyFilter();
+      });
+
+      episodeSelect.addEventListener('change', () => {
+        loadEpisode(episodeSelect.value);
+      });
+
+      speedMenu.addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li) return;
+        setSpeed(parseFloat(li.dataset.speed));
+        closeSpeedMenu();
+      });
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.speed-trigger') && !e.target.closest('#speedMenu')) {
           closeSpeedMenu();
-        });
-        document.addEventListener("click", (e) => {
-          if (
-            !e.target.closest(".speed-trigger") &&
-            !e.target.closest("#speedMenu")
-          ) {
-            closeSpeedMenu();
-          }
-        });
-        speedMenu.addEventListener("click", (e) => e.stopPropagation());
-
-        // 初始化
-        loadPreferences();
-        updateAllSpeedDisplay();
-        if (autoPlay) {
-          autoPlayBtn.classList.add("active");
-          autoPlayBtn.textContent = "自动✓";
         }
+      });
+      speedMenu.addEventListener('click', (e) => e.stopPropagation());
 
-        // 加载上次选择的剧集（默认为 ep1）
-        loadEpisode(episodeSelect.value || "ep1");
-      })();
-    </script>
-  </body>
+      loadPreferences();
+      updateAllSpeedDisplay();
+      if (autoPlay) {
+        autoPlayBtn.classList.add('active');
+        autoPlayBtn.textContent = '自动✓';
+      }
+
+      // 初始加载上次选择的剧集
+      loadEpisode(episodeSelect.value || 'ep1');
+    })();
+  </script>
+</body>
 </html>
