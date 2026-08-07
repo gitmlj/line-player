@@ -1,786 +1,934 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>日剧台词播放器</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover"
+    />
+    <title>日剧台词播放器</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
-      background: #f5f0eb;
-      color: #2e2e2e;
-      height: 100vh;
-      overflow: hidden;
-    }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+          "Noto Sans JP", sans-serif;
+        background: #f5f0eb;
+        color: #2e2e2e;
+        height: 100vh;
+        overflow: hidden;
+      }
 
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: #f5f0eb;
-      z-index: 110;
-      padding: 20px 16px 10px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.3);
-    }
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #f5f0eb;
+        z-index: 110;
+        padding: 20px 16px 10px;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+      }
 
-    .top-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+      .top-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
 
-    .episode-select {
-      padding: 6px 12px;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      background: white;
-      font-size: 0.9rem;
-      color: #4a3f35;
-      outline: none;
-      cursor: pointer;
-      flex: 1;
-    }
+      .episode-select {
+        padding: 6px 12px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        background: white;
+        font-size: 0.9rem;
+        color: #4a3f35;
+        outline: none;
+        cursor: pointer;
+        flex: 1;
+      }
 
-    .search-bar {
-      display: flex;
-      gap: 10px;
-    }
-    .search-input {
-      flex: 1;
-      padding: 6px 14px;
-      border: 1px solid #ddd;
-      border-radius: 24px;
-      font-size: 1rem;
-      background: white;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .search-input:focus {
-      border-color: #b08968;
-    }
-    .filter-fav {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 24px;
-      padding: 0 14px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
-      color: #666;
-    }
-    .filter-fav.active {
-      background: #fff8e7;
-      border-color: #e0b86b;
-      color: #b08968;
-    }
-    .filter-fav .star-icon { font-size: 1.2rem; }
+      .search-bar {
+        display: flex;
+        gap: 10px;
+      }
+      .search-input {
+        flex: 1;
+        padding: 6px 14px;
+        border: 1px solid #ddd;
+        border-radius: 24px;
+        font-size: 1rem;
+        background: white;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .search-input:focus {
+        border-color: #b08968;
+      }
+      .filter-fav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 24px;
+        padding: 0 14px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+        color: #666;
+      }
+      .filter-fav.active {
+        background: #fff8e7;
+        border-color: #e0b86b;
+        color: #b08968;
+      }
+      .filter-fav .star-icon {
+        font-size: 1.2rem;
+      }
 
-    .scroll-container {
-      position: fixed;
-      top: 100px;
-      bottom: 60px;
-      left: 0;
-      right: 0;
-      overflow-y: auto;
-      padding: 0 16px;
-      -webkit-overflow-scrolling: touch;
-    }
+      .scroll-container {
+        position: fixed;
+        top: 100px;
+        bottom: 60px;
+        left: 0;
+        right: 0;
+        overflow-y: auto;
+        padding: 0 16px;
+        -webkit-overflow-scrolling: touch;
+      }
 
-    .line-card {
-      background: white;
-      border-radius: 18px;
-      padding: 16px 16px 10px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-      transition: all 0.2s ease;
-      position: relative;
-      touch-action: pan-y;
-    }
-    .romaji {
-      font-size: 0.95rem;
-      color: #7a6e64;
-      margin-bottom: 6px;
-      font-style: italic;
-      letter-spacing: 0.02em;
-    }
-    .japanese {
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 0px;
-      line-height: 1.8;
-    }
-    .japanese ruby { ruby-align: center; }
-    .japanese rt {
-      font-size: 0.55em;
-      color: #7a6e64;
-      user-select: none;
-    }
-    .chinese {
-      font-size: 0.9rem;
-      color: #2aa198;
-      margin-bottom: 8px;
-    }
+      .line-card {
+        background: white;
+        border-radius: 18px;
+        padding: 16px 16px 10px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        transition: all 0.2s ease;
+        position: relative;
+        touch-action: pan-y;
+      }
+      .romaji {
+        font-size: 0.95rem;
+        color: #7a6e64;
+        margin-bottom: 6px;
+        font-style: italic;
+        letter-spacing: 0.02em;
+      }
+      .japanese {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 0px;
+        line-height: 1.8;
+      }
+      .japanese ruby {
+        ruby-align: center;
+      }
+      .japanese rt {
+        font-size: 0.55em;
+        color: #7a6e64;
+        user-select: none;
+      }
+      .chinese {
+        font-size: 0.9rem;
+        color: #2aa198;
+        margin-bottom: 8px;
+      }
 
-    .progress-bar {
-      width: 100%;
-      height: 4px;
-      background: #eee;
-      border-radius: 2px;
-      margin-bottom: 10px;
-      appearance: none;
-      -webkit-appearance: none;
-      outline: none;
-      cursor: pointer;
-    }
-    .progress-bar::-webkit-slider-thumb {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #b08968;
-      border: none;
-      cursor: pointer;
-    }
-    .progress-bar::-moz-range-thumb {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #b08968;
-      border: none;
-      cursor: pointer;
-    }
+      .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: #eee;
+        border-radius: 2px;
+        margin-bottom: 10px;
+        appearance: none;
+        -webkit-appearance: none;
+        outline: none;
+        cursor: pointer;
+      }
+      .progress-bar::-webkit-slider-thumb {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #b08968;
+        border: none;
+        cursor: pointer;
+      }
+      .progress-bar::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #b08968;
+        border: none;
+        cursor: pointer;
+      }
 
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid #eee;
-      padding-top: 8px;
-    }
-    .left-controls { display: flex; align-items: center; gap: 8px; }
-    .right-controls { display: flex; align-items: center; gap: 12px; }
+      .controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid #eee;
+        padding-top: 8px;
+      }
+      .left-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .right-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-    .play-btn {
-      background: none;
-      border: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      padding: 4px 8px;
-      line-height: 1;
-      color: #b08968;
-      transition: transform 0.1s;
-      min-width: 48px;
-      text-align: center;
-    }
-    .play-btn:active { transform: scale(0.92); }
+      .play-btn {
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        padding: 4px 8px;
+        line-height: 1;
+        color: #b08968;
+        transition: transform 0.1s;
+        min-width: 48px;
+        text-align: center;
+      }
+      .play-btn:active {
+        transform: scale(0.92);
+      }
 
-    .fav-btn {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 4px;
-      color: #ccc;
-    }
-    .fav-btn.active { color: #f0b400; }
+      .fav-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 4px;
+        color: #ccc;
+      }
+      .fav-btn.active {
+        color: #f0b400;
+      }
 
-    .loop-toggle {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.85rem;
-      color: #999;
-      cursor: pointer;
-      user-select: none;
-      background: none;
-      border: 1px solid transparent;
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
-    .loop-toggle.active {
-      color: #b08968;
-      border-color: #b08968;
-      background: #faf3ed;
-      font-weight: 500;
-    }
-    .loop-icon { font-size: 1.2rem; }
+      .loop-toggle {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.85rem;
+        color: #999;
+        cursor: pointer;
+        user-select: none;
+        background: none;
+        border: 1px solid transparent;
+        padding: 4px 10px;
+        border-radius: 20px;
+      }
+      .loop-toggle.active {
+        color: #b08968;
+        border-color: #b08968;
+        background: #faf3ed;
+        font-weight: 500;
+      }
+      .loop-icon {
+        font-size: 1.2rem;
+      }
 
-    .speed-trigger {
-      background: none;
-      border: 1px solid #ddd;
-      font-size: 0.85rem;
-      color: #666;
-      cursor: pointer;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: white;
-      position: relative;
-    }
-    .speed-trigger:hover { border-color: #bbb; }
+      .speed-trigger {
+        background: none;
+        border: 1px solid #ddd;
+        font-size: 0.85rem;
+        color: #666;
+        cursor: pointer;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: white;
+        position: relative;
+      }
+      .speed-trigger:hover {
+        border-color: #bbb;
+      }
 
-    .line-card.playing {
-      box-shadow: 0 0 0 2px #d9b99b;
-    }
+      .line-card.playing {
+        box-shadow: 0 0 0 2px #d9b99b;
+      }
 
-    .speed-menu {
-      position: fixed;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      z-index: 200;
-      list-style: none;
-      min-width: 80px;
-      padding: 4px 0;
-      display: none;
-    }
-    .speed-menu.open { display: block; }
-    .speed-menu li {
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      color: #333;
-      text-align: center;
-    }
-    .speed-menu li:hover { background: #f5f0eb; }
-    .speed-menu li.active { color: #b08968; font-weight: 600; }
+      .speed-menu {
+        position: fixed;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        z-index: 200;
+        list-style: none;
+        min-width: 80px;
+        padding: 4px 0;
+        display: none;
+      }
+      .speed-menu.open {
+        display: block;
+      }
+      .speed-menu li {
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #333;
+        text-align: center;
+      }
+      .speed-menu li:hover {
+        background: #f5f0eb;
+      }
+      .speed-menu li.active {
+        color: #b08968;
+        font-weight: 600;
+      }
 
-    .global-controls {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      border-top: 1px solid #e0d6cc;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-      padding: 8px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 100;
-      height: 60px;
-    }
-    .global-info { display: flex; align-items: center; flex: 1; min-width: 0; }
-    .now-playing {
-      font-size: 0.9rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 140px;
-      color: #4a3f35;
-    }
-    .global-buttons { display: flex; align-items: center; gap: 8px; }
-    .global-btn {
-      background: none;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      padding: 4px;
-      color: #b08968;
-    }
-    .global-btn.small-text { font-size: 0.9rem; }
-    .auto-play-btn {
-      font-size: 0.85rem;
-      color: #999;
-      background: none;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      padding: 4px 10px;
-      cursor: pointer;
-    }
-    .auto-play-btn.active {
-      background: #faf3ed;
-      border-color: #b08968;
-      color: #b08968;
-      font-weight: 500;
-    }
-    .ab-btn {
-      font-size: 0.85rem;
-      color: #999;
-      background: none;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      padding: 4px 10px;
-      cursor: pointer;
-    }
-    .ab-btn.active {
-      background: #faf3ed;
-      border-color: #b08968;
-      color: #b08968;
-      font-weight: 500;
-    }
+      .global-controls {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        border-top: 1px solid #e0d6cc;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
+        height: 60px;
+      }
+      .global-info {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+      }
+      .now-playing {
+        font-size: 0.9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 140px;
+        color: #4a3f35;
+      }
+      .global-buttons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .global-btn {
+        background: none;
+        border: none;
+        font-size: 1.4rem;
+        cursor: pointer;
+        padding: 4px;
+        color: #b08968;
+      }
+      .global-btn.small-text {
+        font-size: 0.9rem;
+      }
+      .auto-play-btn {
+        font-size: 0.85rem;
+        color: #999;
+        background: none;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        padding: 4px 10px;
+        cursor: pointer;
+      }
+      .auto-play-btn.active {
+        background: #faf3ed;
+        border-color: #b08968;
+        color: #b08968;
+        font-weight: 500;
+      }
+      .ab-btn {
+        font-size: 0.85rem;
+        color: #999;
+        background: none;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        padding: 4px 10px;
+        cursor: pointer;
+      }
+      .ab-btn.active {
+        background: #faf3ed;
+        border-color: #b08968;
+        color: #b08968;
+        font-weight: 500;
+      }
 
-    .toast {
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.7);
-      color: white;
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      z-index: 200;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-    .toast.show { opacity: 1; }
+      .toast {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        z-index: 200;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+      }
+      .toast.show {
+        opacity: 1;
+      }
 
-    mark {
-      background: #ffeb99;
-      padding: 0 2px;
-      border-radius: 2px;
-    }
-    .no-result {
-      text-align: center;
-      padding: 40px;
-      color: #888;
-    }
-  </style>
-</head>
-<body>
-  <audio id="bgAudio" playsinline webkit-playsinline preload="auto"></audio>
+      mark {
+        background: #ffeb99;
+        padding: 0 2px;
+        border-radius: 2px;
+      }
+      .no-result {
+        text-align: center;
+        padding: 40px;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="bgAudio" playsinline webkit-playsinline preload="auto"></audio>
 
-  <div class="header">
-    <div class="top-row">
-      <select id="episodeSelect" class="episode-select">
-        <option value="ep1">第一集</option>
-        <option value="ep6">第六集</option>
-        <!-- 以后新增剧集只需在这里加 option -->
-      </select>
-    </div>
-    <div class="search-bar">
-      <input type="text" class="search-input" id="searchInput" placeholder="搜索罗马音 / 日文 / 中文...">
-      <div class="filter-fav" id="filterFavBtn">
-        <span class="star-icon">⭐</span>
+    <div class="header">
+      <div class="top-row">
+        <select id="episodeSelect" class="episode-select">
+          <option value="ep1">第一集</option>
+          <option value="ep6">第六集</option>
+          <!-- 以后新增剧集只需在这里加 option -->
+        </select>
+      </div>
+      <div class="search-bar">
+        <input
+          type="text"
+          class="search-input"
+          id="searchInput"
+          placeholder="搜索罗马音 / 日文 / 中文..."
+        />
+        <div class="filter-fav" id="filterFavBtn">
+          <span class="star-icon">⭐</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="scroll-container" id="scrollContainer">
-    <div id="lines-container"></div>
-  </div>
-
-  <div class="global-controls" id="globalControls">
-    <div class="global-info">
-      <span class="now-playing" id="nowPlayingText">未播放</span>
+    <div class="scroll-container" id="scrollContainer">
+      <div id="lines-container"></div>
     </div>
-    <div class="global-buttons">
-      <button class="global-btn" id="prevBtn">⏮</button>
-      <button class="global-btn" id="playPauseBtn">▶</button>
-      <button class="global-btn" id="nextBtn">⏭</button>
-      <button class="speed-trigger" id="globalSpeedTrigger">1x</button>
-      <button class="auto-play-btn" id="autoPlayBtn">自动</button>
-      <button class="ab-btn" id="abBtn">A-B</button>
+
+    <div class="global-controls" id="globalControls">
+      <div class="global-info">
+        <span class="now-playing" id="nowPlayingText">未播放</span>
+      </div>
+      <div class="global-buttons">
+        <button class="global-btn" id="prevBtn">⏮</button>
+        <button class="global-btn" id="playPauseBtn">▶</button>
+        <button class="global-btn" id="nextBtn">⏭</button>
+        <button class="speed-trigger" id="globalSpeedTrigger">1x</button>
+        <button class="auto-play-btn" id="autoPlayBtn">自动</button>
+        <button class="ab-btn" id="abBtn">A-B</button>
+      </div>
     </div>
-  </div>
 
-  <ul class="speed-menu" id="speedMenu">
-    <li data-speed="1">1x</li>
-    <li data-speed="1.25">1.25x</li>
-    <li data-speed="1.5">1.5x</li>
-    <li data-speed="2">2x</li>
-    <li data-speed="0.75">0.75x</li>
-  </ul>
+    <ul class="speed-menu" id="speedMenu">
+      <li data-speed="1">1x</li>
+      <li data-speed="1.25">1.25x</li>
+      <li data-speed="1.5">1.5x</li>
+      <li data-speed="2">2x</li>
+      <li data-speed="0.75">0.75x</li>
+    </ul>
 
-  <div class="toast" id="toast"></div>
+    <div class="toast" id="toast"></div>
 
-  <script>
-    (function() {
-      const container = document.getElementById('lines-container');
-      const scrollContainer = document.getElementById('scrollContainer');
-      const searchInput = document.getElementById('searchInput');
-      const filterFavBtn = document.getElementById('filterFavBtn');
-      const nowPlayingText = document.getElementById('nowPlayingText');
-      const playPauseBtn = document.getElementById('playPauseBtn');
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const globalSpeedTrigger = document.getElementById('globalSpeedTrigger');
-      const autoPlayBtn = document.getElementById('autoPlayBtn');
-      const abBtn = document.getElementById('abBtn');
-      const speedMenu = document.getElementById('speedMenu');
-      const toast = document.getElementById('toast');
-      const bgAudio = document.getElementById('bgAudio');
-      const episodeSelect = document.getElementById('episodeSelect');
+    <script>
+      (function () {
+        const container = document.getElementById("lines-container");
+        const scrollContainer = document.getElementById("scrollContainer");
+        const searchInput = document.getElementById("searchInput");
+        const filterFavBtn = document.getElementById("filterFavBtn");
+        const nowPlayingText = document.getElementById("nowPlayingText");
+        const playPauseBtn = document.getElementById("playPauseBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const globalSpeedTrigger =
+          document.getElementById("globalSpeedTrigger");
+        const autoPlayBtn = document.getElementById("autoPlayBtn");
+        const abBtn = document.getElementById("abBtn");
+        const speedMenu = document.getElementById("speedMenu");
+        const toast = document.getElementById("toast");
+        const bgAudio = document.getElementById("bgAudio");
+        const episodeSelect = document.getElementById("episodeSelect");
 
-      let allLines = [];
-      let filteredLines = [];
-      let currentAudioId = null;
-      const loopStates = {};
-      let currentSpeed = 1;
-      const SPEEDS = [1, 1.25, 1.5, 2, 0.75];
-      let autoPlay = false;
-      let favorites = new Set();
-      let abActive = false, abPhase = null, pointA = 0, pointB = 0, abAudioId = null;
-      let progressTimer = null;
+        let allLines = [];
+        let filteredLines = [];
+        let currentAudioId = null;
+        const loopStates = {};
+        let currentSpeed = 1;
+        const SPEEDS = [1, 1.25, 1.5, 2, 0.75];
+        let autoPlay = false;
+        let favorites = new Set();
+        let abActive = false,
+          abPhase = null,
+          pointA = 0,
+          pointB = 0,
+          abAudioId = null;
+        let progressTimer = null;
 
-      // ---------- 音频路径转换：将旧格式 line001.mp3 转为新格式 line_001.mp3 ----------
-      function normalizeAudioPath(path) {
-        // 匹配最后一个斜杠后的文件名，替换规则：line+数字 => line_数字 (不区分大小写)
-        return path.replace(/\/([^/]+)$/, (match, filename) => {
-          const newName = filename.replace(/^(line)(\d+)\.mp3$/i, 'line_$2.mp3');
-          return '/' + newName;
-        });
-      }
-
-      function savePreferences() {
-        try {
-          localStorage.setItem('nihongo_player_prefs', JSON.stringify({
-            speed: currentSpeed,
-            autoPlay: autoPlay,
-            favorites: Array.from(favorites),
-            episode: episodeSelect.value
-          }));
-        } catch (e) {}
-      }
-      function loadPreferences() {
-        try {
-          const raw = localStorage.getItem('nihongo_player_prefs');
-          if (raw) {
-            const p = JSON.parse(raw);
-            if (p.speed && SPEEDS.includes(p.speed)) currentSpeed = p.speed;
-            if (typeof p.autoPlay === 'boolean') autoPlay = p.autoPlay;
-            if (Array.isArray(p.favorites)) favorites = new Set(p.favorites);
-            if (p.episode) episodeSelect.value = p.episode;
-          }
-        } catch (e) {}
-      }
-
-      // 加载指定剧集的 JSON 数据
-      function loadEpisode(ep) {
-        stopCurrent();
-        container.innerHTML = '<div class="no-result">加载中...</div>';
-        fetch(`data/${ep}.json`)
-          .then(res => res.ok ? res.json() : Promise.reject('加载失败'))
-          .then(data => {
-            if (!Array.isArray(data)) throw new Error('格式错误');
-            // 转换所有台词中的音频路径为新格式
-            allLines = data.map(line => ({
-              ...line,
-              audio: normalizeAudioPath(line.audio)
-            }));
-            allLines.forEach(line => {
-              if (!(line.audio in loopStates)) loopStates[line.audio] = false;
-            });
-            applyFilter();
-            savePreferences();
-          })
-          .catch(err => {
-            container.innerHTML = '<div class="no-result">❌ 数据加载失败，请检查文件</div>';
-            console.error(err);
+        // ---------- 音频路径转换：将旧格式 line001.mp3 转为新格式 line_001.mp3 ----------
+        function normalizeAudioPath(path) {
+          // 匹配最后一个斜杠后的文件名，替换规则：line+数字 => line_数字 (不区分大小写)
+          return path.replace(/\/([^/]+)$/, (match, filename) => {
+            const newName = filename.replace(
+              /^(line)(\d+)\.mp3$/i,
+              "line_$2.mp3",
+            );
+            return "/" + newName;
           });
-      }
+        }
 
-      function escapeHtml(text) {
-        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-      }
-      function formatJapanese(text) {
-        return text.replace(/([\u4e00-\u9fff\u3400-\u4dbf]+)（([\u3040-\u309f\u30a0-\u30ff]+)）/g, '<ruby>$1<rt>$2</rt></ruby>');
-      }
-      function highlightText(text, keyword) {
-        if (!keyword.trim()) return escapeHtml(text);
-        const esc = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        return escapeHtml(text).replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
-      }
-      function showToast(msg) {
-        toast.textContent = msg;
-        toast.classList.add('show');
-        clearTimeout(toast._timeout);
-        toast._timeout = setTimeout(() => toast.classList.remove('show'), 1500);
-      }
-      function getLineByAudioId(id) { return allLines.find(l => l.audio === id); }
-      function getNextIndex(id) {
-        const idx = filteredLines.findIndex(l => l.audio === id);
-        if (idx === -1) return -1;
-        return idx < filteredLines.length - 1 ? idx + 1 : 0;
-      }
-      function getPrevIndex(id) {
-        const idx = filteredLines.findIndex(l => l.audio === id);
-        if (idx === -1) return -1;
-        return idx > 0 ? idx - 1 : filteredLines.length - 1;
-      }
-
-      function updateAllSpeedDisplay() {
-        const txt = currentSpeed + 'x';
-        globalSpeedTrigger.textContent = txt;
-        document.querySelectorAll('.speed-trigger').forEach(btn => {
-          if (btn !== globalSpeedTrigger) btn.textContent = txt;
-        });
-        document.querySelectorAll('#speedMenu li').forEach(li => {
-          li.classList.toggle('active', parseFloat(li.dataset.speed) === currentSpeed);
-        });
-      }
-      function setSpeed(speed) {
-        if (speed === currentSpeed) return;
-        currentSpeed = speed;
-        updateAllSpeedDisplay();
-        if (bgAudio && !bgAudio.paused) bgAudio.playbackRate = currentSpeed;
-        savePreferences();
-      }
-
-      function handleScrollClose() {
-        if (speedMenu.classList.contains('open')) closeSpeedMenu();
-      }
-      function openSpeedMenu(triggerBtn) {
-        const rect = triggerBtn.getBoundingClientRect();
-        speedMenu.style.cssText = 'display:block; position:fixed; left:-9999px; top:-9999px;';
-        const menuHeight = speedMenu.offsetHeight;
-        const menuWidth = speedMenu.offsetWidth;
-        speedMenu.style.cssText = '';
-        let top = rect.top - menuHeight - 4;
-        let left = rect.left;
-        if (top < 10) top = rect.bottom + 4;
-        if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth - 10;
-        speedMenu.style.top = top + 'px';
-        speedMenu.style.left = left + 'px';
-        speedMenu.classList.add('open');
-        updateAllSpeedDisplay();
-        scrollContainer.addEventListener('scroll', handleScrollClose, { passive: true });
-      }
-      function closeSpeedMenu() {
-        speedMenu.classList.remove('open');
-        scrollContainer.removeEventListener('scroll', handleScrollClose);
-      }
-
-      function startProgressUpdater() {
-        stopProgressUpdater();
-        progressTimer = setInterval(() => {
-          if (bgAudio && !bgAudio.paused && bgAudio.duration) {
-            const pct = (bgAudio.currentTime / bgAudio.duration) * 100;
-            const card = document.querySelector(`.line-card[data-audio-id="${currentAudioId}"]`);
-            if (card) {
-              const bar = card.querySelector('.progress-bar');
-              if (bar && !bar.matches(':active')) bar.value = pct;
+        function savePreferences() {
+          try {
+            localStorage.setItem(
+              "nihongo_player_prefs",
+              JSON.stringify({
+                speed: currentSpeed,
+                autoPlay: autoPlay,
+                favorites: Array.from(favorites),
+                episode: episodeSelect.value,
+              }),
+            );
+          } catch (e) {}
+        }
+        function loadPreferences() {
+          try {
+            const raw = localStorage.getItem("nihongo_player_prefs");
+            if (raw) {
+              const p = JSON.parse(raw);
+              if (p.speed && SPEEDS.includes(p.speed)) currentSpeed = p.speed;
+              if (typeof p.autoPlay === "boolean") autoPlay = p.autoPlay;
+              if (Array.isArray(p.favorites)) favorites = new Set(p.favorites);
+              if (p.episode) episodeSelect.value = p.episode;
             }
+          } catch (e) {}
+        }
+
+        // 加载指定剧集的 JSON 数据
+        function loadEpisode(ep) {
+          stopCurrent();
+          container.innerHTML = '<div class="no-result">加载中...</div>';
+          fetch(`data/${ep}.json`)
+            .then((res) => (res.ok ? res.json() : Promise.reject("加载失败")))
+            .then((data) => {
+              if (!Array.isArray(data)) throw new Error("格式错误");
+
+              // 转换所有台词中的音频路径为新格式
+              const currentEp = ep; // 当前剧集标识，例如 "ep6"
+              allLines = data.map((line) => {
+                let audioPath = line.audio;
+                // 如果路径没有包含 /ep6/ 这样的子目录，自动补充
+                if (!audioPath.includes(`/${currentEp}/`)) {
+                  // 将路径拆分为目录和文件名，然后在 audio/ 后插入 ep6/
+                  audioPath = audioPath.replace(
+                    /^(audio\/)/,
+                    `$1${currentEp}/`,
+                  );
+                }
+                return {
+                  ...line,
+                  audio: normalizeAudioPath(audioPath),
+                };
+              });
+
+              allLines.forEach((line) => {
+                if (!(line.audio in loopStates)) loopStates[line.audio] = false;
+              });
+              applyFilter();
+              savePreferences();
+            })
+            .catch((err) => {
+              container.innerHTML =
+                '<div class="no-result">❌ 数据加载失败，请检查文件</div>';
+              console.error(err);
+            });
+        }
+
+        function escapeHtml(text) {
+          return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+        }
+        function formatJapanese(text) {
+          return text.replace(
+            /([\u4e00-\u9fff\u3400-\u4dbf]+)（([\u3040-\u309f\u30a0-\u30ff]+)）/g,
+            "<ruby>$1<rt>$2</rt></ruby>",
+          );
+        }
+        function highlightText(text, keyword) {
+          if (!keyword.trim()) return escapeHtml(text);
+          const esc = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+          return escapeHtml(text).replace(
+            new RegExp(`(${esc})`, "gi"),
+            "<mark>$1</mark>",
+          );
+        }
+        function showToast(msg) {
+          toast.textContent = msg;
+          toast.classList.add("show");
+          clearTimeout(toast._timeout);
+          toast._timeout = setTimeout(
+            () => toast.classList.remove("show"),
+            1500,
+          );
+        }
+        function getLineByAudioId(id) {
+          return allLines.find((l) => l.audio === id);
+        }
+        function getNextIndex(id) {
+          const idx = filteredLines.findIndex((l) => l.audio === id);
+          if (idx === -1) return -1;
+          return idx < filteredLines.length - 1 ? idx + 1 : 0;
+        }
+        function getPrevIndex(id) {
+          const idx = filteredLines.findIndex((l) => l.audio === id);
+          if (idx === -1) return -1;
+          return idx > 0 ? idx - 1 : filteredLines.length - 1;
+        }
+
+        function updateAllSpeedDisplay() {
+          const txt = currentSpeed + "x";
+          globalSpeedTrigger.textContent = txt;
+          document.querySelectorAll(".speed-trigger").forEach((btn) => {
+            if (btn !== globalSpeedTrigger) btn.textContent = txt;
+          });
+          document.querySelectorAll("#speedMenu li").forEach((li) => {
+            li.classList.toggle(
+              "active",
+              parseFloat(li.dataset.speed) === currentSpeed,
+            );
+          });
+        }
+        function setSpeed(speed) {
+          if (speed === currentSpeed) return;
+          currentSpeed = speed;
+          updateAllSpeedDisplay();
+          if (bgAudio && !bgAudio.paused) bgAudio.playbackRate = currentSpeed;
+          savePreferences();
+        }
+
+        function handleScrollClose() {
+          if (speedMenu.classList.contains("open")) closeSpeedMenu();
+        }
+        function openSpeedMenu(triggerBtn) {
+          const rect = triggerBtn.getBoundingClientRect();
+          speedMenu.style.cssText =
+            "display:block; position:fixed; left:-9999px; top:-9999px;";
+          const menuHeight = speedMenu.offsetHeight;
+          const menuWidth = speedMenu.offsetWidth;
+          speedMenu.style.cssText = "";
+          let top = rect.top - menuHeight - 4;
+          let left = rect.left;
+          if (top < 10) top = rect.bottom + 4;
+          if (left + menuWidth > window.innerWidth)
+            left = window.innerWidth - menuWidth - 10;
+          speedMenu.style.top = top + "px";
+          speedMenu.style.left = left + "px";
+          speedMenu.classList.add("open");
+          updateAllSpeedDisplay();
+          scrollContainer.addEventListener("scroll", handleScrollClose, {
+            passive: true,
+          });
+        }
+        function closeSpeedMenu() {
+          speedMenu.classList.remove("open");
+          scrollContainer.removeEventListener("scroll", handleScrollClose);
+        }
+
+        function startProgressUpdater() {
+          stopProgressUpdater();
+          progressTimer = setInterval(() => {
+            if (bgAudio && !bgAudio.paused && bgAudio.duration) {
+              const pct = (bgAudio.currentTime / bgAudio.duration) * 100;
+              const card = document.querySelector(
+                `.line-card[data-audio-id="${currentAudioId}"]`,
+              );
+              if (card) {
+                const bar = card.querySelector(".progress-bar");
+                if (bar && !bar.matches(":active")) bar.value = pct;
+              }
+            }
+          }, 200);
+        }
+        function stopProgressUpdater() {
+          if (progressTimer) {
+            clearInterval(progressTimer);
+            progressTimer = null;
           }
-        }, 200);
-      }
-      function stopProgressUpdater() {
-        if (progressTimer) { clearInterval(progressTimer); progressTimer = null; }
-      }
-
-      function stopCurrent(resetProgress = true) {
-        if (bgAudio) {
-          bgAudio.pause();
-          if (resetProgress) bgAudio.currentTime = 0;
         }
-        if (currentAudioId) {
-          updateCardPlayIcon(currentAudioId, '▶');
-          const card = document.querySelector(`.line-card[data-audio-id="${currentAudioId}"]`);
-          if (card) card.classList.remove('playing');
-          currentAudioId = null;
-        }
-        stopProgressUpdater();
-        updateGlobalNowPlaying('未播放');
-        playPauseBtn.textContent = '▶';
-        clearABActive();
-      }
 
-      function setupMediaSession(line) {
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.metadata = new MediaMetadata({
-            title: line.chinese || line.japanese,
-            artist: '台词播放器',
-            album: '',
-            artwork: []
-          });
-          navigator.mediaSession.setActionHandler('play', () => {
-            if (bgAudio.paused) bgAudio.play();
-          });
-          navigator.mediaSession.setActionHandler('pause', () => {
+        function stopCurrent(resetProgress = true) {
+          if (bgAudio) {
             bgAudio.pause();
-          });
-          navigator.mediaSession.setActionHandler('previoustrack', playPrev);
-          navigator.mediaSession.setActionHandler('nexttrack', playNext);
+            if (resetProgress) bgAudio.currentTime = 0;
+          }
+          if (currentAudioId) {
+            updateCardPlayIcon(currentAudioId, "▶");
+            const card = document.querySelector(
+              `.line-card[data-audio-id="${currentAudioId}"]`,
+            );
+            if (card) card.classList.remove("playing");
+            currentAudioId = null;
+          }
+          stopProgressUpdater();
+          updateGlobalNowPlaying("未播放");
+          playPauseBtn.textContent = "▶";
+          clearABActive();
         }
-      }
 
-      function playLine(audioSrc, loop) {
-        stopCurrent(false);
-        bgAudio.src = audioSrc;
-        bgAudio.loop = loop;
-        bgAudio.playbackRate = currentSpeed;
-        bgAudio.play().catch(err => console.warn('播放失败:', err));
-
-        currentAudioId = audioSrc;
-        const card = document.querySelector(`.line-card[data-audio-id="${audioSrc}"]`);
-        if (card) {
-          card.classList.add('playing');
-          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        function setupMediaSession(line) {
+          if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+              title: line.chinese || line.japanese,
+              artist: "台词播放器",
+              album: "",
+              artwork: [],
+            });
+            navigator.mediaSession.setActionHandler("play", () => {
+              if (bgAudio.paused) bgAudio.play();
+            });
+            navigator.mediaSession.setActionHandler("pause", () => {
+              bgAudio.pause();
+            });
+            navigator.mediaSession.setActionHandler("previoustrack", playPrev);
+            navigator.mediaSession.setActionHandler("nexttrack", playNext);
+          }
         }
-        updateCardPlayIcon(audioSrc, '⏸');
-        const line = getLineByAudioId(audioSrc);
-        updateGlobalNowPlaying(line ? (line.japanese || line.romaji) : '');
-        playPauseBtn.textContent = '⏸';
-        if (line) setupMediaSession(line);
-        startProgressUpdater();
 
-        bgAudio.onended = () => {
-          if (!bgAudio.loop) {
-            if (abActive && currentAudioId === abAudioId && pointA !== pointB) {
-              bgAudio.currentTime = pointA;
-              bgAudio.play();
+        function playLine(audioSrc, loop) {
+          stopCurrent(false);
+          bgAudio.src = audioSrc;
+          bgAudio.loop = loop;
+          bgAudio.playbackRate = currentSpeed;
+          bgAudio.play().catch((err) => console.warn("播放失败:", err));
+
+          currentAudioId = audioSrc;
+          const card = document.querySelector(
+            `.line-card[data-audio-id="${audioSrc}"]`,
+          );
+          if (card) {
+            card.classList.add("playing");
+            card.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+          updateCardPlayIcon(audioSrc, "⏸");
+          const line = getLineByAudioId(audioSrc);
+          updateGlobalNowPlaying(line ? line.japanese || line.romaji : "");
+          playPauseBtn.textContent = "⏸";
+          if (line) setupMediaSession(line);
+          startProgressUpdater();
+
+          bgAudio.onended = () => {
+            if (!bgAudio.loop) {
+              if (
+                abActive &&
+                currentAudioId === abAudioId &&
+                pointA !== pointB
+              ) {
+                bgAudio.currentTime = pointA;
+                bgAudio.play();
+                return;
+              }
+              const nextIdx = getNextIndex(audioSrc);
+              if (autoPlay && nextIdx !== -1) {
+                const nextLine = filteredLines[nextIdx];
+                playLine(nextLine.audio, loopStates[nextLine.audio] || false);
+              } else {
+                stopCurrent();
+              }
+            }
+          };
+
+          if (abActive && currentAudioId === abAudioId) {
+            bgAudio.ontimeupdate = abTimeUpdateHandler;
+          } else {
+            bgAudio.ontimeupdate = null;
+          }
+        }
+
+        function togglePlayPause() {
+          if (bgAudio && !bgAudio.paused) {
+            bgAudio.pause();
+            playPauseBtn.textContent = "▶";
+            updateCardPlayIcon(currentAudioId, "▶");
+            stopProgressUpdater();
+          } else if (bgAudio && bgAudio.paused) {
+            bgAudio.play();
+            playPauseBtn.textContent = "⏸";
+            updateCardPlayIcon(currentAudioId, "⏸");
+            startProgressUpdater();
+          } else if (filteredLines.length > 0) {
+            const first = filteredLines[0];
+            playLine(first.audio, loopStates[first.audio] || false);
+          }
+        }
+        function playNext() {
+          if (!currentAudioId) return;
+          const idx = getNextIndex(currentAudioId);
+          if (idx !== -1)
+            playLine(
+              filteredLines[idx].audio,
+              loopStates[filteredLines[idx].audio] || false,
+            );
+        }
+        function playPrev() {
+          if (!currentAudioId) return;
+          const idx = getPrevIndex(currentAudioId);
+          if (idx !== -1)
+            playLine(
+              filteredLines[idx].audio,
+              loopStates[filteredLines[idx].audio] || false,
+            );
+        }
+        function updateCardPlayIcon(audioId, icon) {
+          const card = document.querySelector(
+            `.line-card[data-audio-id="${audioId}"]`,
+          );
+          if (card) {
+            const btn = card.querySelector(".play-btn");
+            if (btn) btn.textContent = icon;
+          }
+        }
+        function updateGlobalNowPlaying(text) {
+          nowPlayingText.textContent = text || "未播放";
+        }
+
+        function toggleLoop(audioId, el) {
+          const active = !loopStates[audioId];
+          loopStates[audioId] = active;
+          if (el) {
+            el.classList.toggle("active", active);
+            el.querySelector(".loop-text").textContent = active
+              ? "循环中"
+              : "循环";
+          }
+          if (currentAudioId === audioId) bgAudio.loop = active;
+        }
+
+        function toggleFavorite(audioId, el) {
+          if (favorites.has(audioId)) {
+            favorites.delete(audioId);
+            if (el) el.classList.remove("active");
+          } else {
+            favorites.add(audioId);
+            if (el) el.classList.add("active");
+          }
+          savePreferences();
+          if (filterFavBtn.classList.contains("active")) applyFilter();
+        }
+
+        function abTimeUpdateHandler() {
+          if (!bgAudio || currentAudioId !== abAudioId || !abActive) return;
+          if (bgAudio.currentTime >= pointB) bgAudio.currentTime = pointA;
+        }
+        function clearABActive() {
+          if (abActive) bgAudio.ontimeupdate = null;
+          abActive = false;
+          abPhase = null;
+          abAudioId = null;
+          abBtn.classList.remove("active");
+          abBtn.textContent = "A-B";
+        }
+        function enterABSetMode() {
+          if (!currentAudioId || !bgAudio || bgAudio.paused) {
+            showToast("请先播放一句台词");
+            return;
+          }
+          if (abActive) {
+            clearABActive();
+            return;
+          }
+          abPhase = "setA";
+          abBtn.classList.add("active");
+          abBtn.textContent = "设置A点";
+          showToast("点击进度条设置 A 点");
+        }
+        function handleProgressBarClick(e, audioId) {
+          const bar = e.target;
+          const rect = bar.getBoundingClientRect();
+          const ratio = (e.clientX - rect.left) / rect.width;
+          if (abPhase === "setA" && currentAudioId === audioId) {
+            pointA = (bgAudio.duration || 0) * ratio;
+            abPhase = "setB";
+            abBtn.textContent = "设置B点";
+            showToast("点击进度条设置 B 点");
+            e.preventDefault();
+          } else if (abPhase === "setB" && currentAudioId === audioId) {
+            pointB = (bgAudio.duration || 0) * ratio;
+            if (pointB <= pointA) {
+              showToast("B 点必须大于 A 点");
               return;
             }
-            const nextIdx = getNextIndex(audioSrc);
-            if (autoPlay && nextIdx !== -1) {
-              const nextLine = filteredLines[nextIdx];
-              playLine(nextLine.audio, loopStates[nextLine.audio] || false);
-            } else {
-              stopCurrent();
-            }
+            abPhase = null;
+            abActive = true;
+            abAudioId = audioId;
+            abBtn.textContent = "AB中";
+            abBtn.classList.add("active");
+            bgAudio.ontimeupdate = abTimeUpdateHandler;
+            bgAudio.currentTime = pointA;
+            bgAudio.play();
+            showToast("AB 循环已开始");
+            e.preventDefault();
+          } else if (currentAudioId === audioId) {
+            bgAudio.currentTime = (bgAudio.duration || 0) * ratio;
+            bar.value = ratio * 100;
           }
-        };
-
-        if (abActive && currentAudioId === abAudioId) {
-          bgAudio.ontimeupdate = abTimeUpdateHandler;
-        } else {
-          bgAudio.ontimeupdate = null;
         }
-      }
 
-      function togglePlayPause() {
-        if (bgAudio && !bgAudio.paused) {
-          bgAudio.pause();
-          playPauseBtn.textContent = '▶';
-          updateCardPlayIcon(currentAudioId, '▶');
-          stopProgressUpdater();
-        } else if (bgAudio && bgAudio.paused) {
-          bgAudio.play();
-          playPauseBtn.textContent = '⏸';
-          updateCardPlayIcon(currentAudioId, '⏸');
-          startProgressUpdater();
-        } else if (filteredLines.length > 0) {
-          const first = filteredLines[0];
-          playLine(first.audio, loopStates[first.audio] || false);
+        function setupLongPress(card, line) {
+          const textToCopy =
+            line.japanese.replace(/（.*?）/g, "") + "\n" + line.chinese;
+          let timer;
+          card.addEventListener("touchstart", () => {
+            timer = setTimeout(() => {
+              navigator.clipboard
+                .writeText(textToCopy)
+                .then(() => showToast("已复制台词"))
+                .catch(() => showToast("复制失败"));
+            }, 500);
+          });
+          card.addEventListener("touchend", () => clearTimeout(timer));
+          card.addEventListener("touchmove", () => clearTimeout(timer));
+          card.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            navigator.clipboard
+              .writeText(textToCopy)
+              .then(() => showToast("已复制台词"))
+              .catch(() => showToast("复制失败"));
+          });
         }
-      }
-      function playNext() {
-        if (!currentAudioId) return;
-        const idx = getNextIndex(currentAudioId);
-        if (idx !== -1) playLine(filteredLines[idx].audio, loopStates[filteredLines[idx].audio] || false);
-      }
-      function playPrev() {
-        if (!currentAudioId) return;
-        const idx = getPrevIndex(currentAudioId);
-        if (idx !== -1) playLine(filteredLines[idx].audio, loopStates[filteredLines[idx].audio] || false);
-      }
-      function updateCardPlayIcon(audioId, icon) {
-        const card = document.querySelector(`.line-card[data-audio-id="${audioId}"]`);
-        if (card) {
-          const btn = card.querySelector('.play-btn');
-          if (btn) btn.textContent = icon;
-        }
-      }
-      function updateGlobalNowPlaying(text) {
-        nowPlayingText.textContent = text || '未播放';
-      }
 
-      function toggleLoop(audioId, el) {
-        const active = !loopStates[audioId];
-        loopStates[audioId] = active;
-        if (el) {
-          el.classList.toggle('active', active);
-          el.querySelector('.loop-text').textContent = active ? '循环中' : '循环';
-        }
-        if (currentAudioId === audioId) bgAudio.loop = active;
-      }
-
-      function toggleFavorite(audioId, el) {
-        if (favorites.has(audioId)) {
-          favorites.delete(audioId);
-          if (el) el.classList.remove('active');
-        } else {
-          favorites.add(audioId);
-          if (el) el.classList.add('active');
-        }
-        savePreferences();
-        if (filterFavBtn.classList.contains('active')) applyFilter();
-      }
-
-      function abTimeUpdateHandler() {
-        if (!bgAudio || currentAudioId !== abAudioId || !abActive) return;
-        if (bgAudio.currentTime >= pointB) bgAudio.currentTime = pointA;
-      }
-      function clearABActive() {
-        if (abActive) bgAudio.ontimeupdate = null;
-        abActive = false; abPhase = null; abAudioId = null;
-        abBtn.classList.remove('active'); abBtn.textContent = 'A-B';
-      }
-      function enterABSetMode() {
-        if (!currentAudioId || !bgAudio || bgAudio.paused) { showToast('请先播放一句台词'); return; }
-        if (abActive) { clearABActive(); return; }
-        abPhase = 'setA';
-        abBtn.classList.add('active'); abBtn.textContent = '设置A点';
-        showToast('点击进度条设置 A 点');
-      }
-      function handleProgressBarClick(e, audioId) {
-        const bar = e.target;
-        const rect = bar.getBoundingClientRect();
-        const ratio = (e.clientX - rect.left) / rect.width;
-        if (abPhase === 'setA' && currentAudioId === audioId) {
-          pointA = (bgAudio.duration || 0) * ratio;
-          abPhase = 'setB'; abBtn.textContent = '设置B点';
-          showToast('点击进度条设置 B 点');
-          e.preventDefault();
-        } else if (abPhase === 'setB' && currentAudioId === audioId) {
-          pointB = (bgAudio.duration || 0) * ratio;
-          if (pointB <= pointA) { showToast('B 点必须大于 A 点'); return; }
-          abPhase = null; abActive = true; abAudioId = audioId;
-          abBtn.textContent = 'AB中'; abBtn.classList.add('active');
-          bgAudio.ontimeupdate = abTimeUpdateHandler;
-          bgAudio.currentTime = pointA;
-          bgAudio.play();
-          showToast('AB 循环已开始');
-          e.preventDefault();
-        } else if (currentAudioId === audioId) {
-          bgAudio.currentTime = (bgAudio.duration || 0) * ratio;
-          bar.value = ratio * 100;
-        }
-      }
-
-      function setupLongPress(card, line) {
-        const textToCopy = line.japanese.replace(/（.*?）/g, '') + '\n' + line.chinese;
-        let timer;
-        card.addEventListener('touchstart', () => {
-          timer = setTimeout(() => {
-            navigator.clipboard.writeText(textToCopy).then(() => showToast('已复制台词')).catch(() => showToast('复制失败'));
-          }, 500);
-        });
-        card.addEventListener('touchend', () => clearTimeout(timer));
-        card.addEventListener('touchmove', () => clearTimeout(timer));
-        card.addEventListener('contextmenu', (e) => {
-          e.preventDefault();
-          navigator.clipboard.writeText(textToCopy).then(() => showToast('已复制台词')).catch(() => showToast('复制失败'));
-        });
-      }
-
-      function renderLines(lines) {
-        if (!lines || lines.length === 0) {
-          container.innerHTML = '<div class="no-result">没有匹配的台词</div>';
-          return;
-        }
-        const keyword = searchInput.value.trim();
-        let html = '';
-        lines.forEach(line => {
-          const audioId = line.audio;
-          const isLoop = loopStates[audioId] || false;
-          const isFav = favorites.has(audioId);
-          html += `
+        function renderLines(lines) {
+          if (!lines || lines.length === 0) {
+            container.innerHTML = '<div class="no-result">没有匹配的台词</div>';
+            return;
+          }
+          const keyword = searchInput.value.trim();
+          let html = "";
+          lines.forEach((line) => {
+            const audioId = line.audio;
+            const isLoop = loopStates[audioId] || false;
+            const isFav = favorites.has(audioId);
+            html += `
             <div class="line-card" data-audio-id="${escapeHtml(audioId)}">
               <div class="romaji">${highlightText(line.romaji, keyword)}</div>
               <div class="japanese">${formatJapanese(highlightText(line.japanese, keyword))}</div>
@@ -789,128 +937,140 @@
               <div class="controls">
                 <div class="left-controls">
                   <button class="play-btn" data-action="play" data-audio-id="${escapeHtml(audioId)}">▶</button>
-                  <button class="fav-btn ${isFav ? 'active' : ''}" data-action="fav" data-audio-id="${escapeHtml(audioId)}">${isFav ? '★' : '☆'}</button>
+                  <button class="fav-btn ${isFav ? "active" : ""}" data-action="fav" data-audio-id="${escapeHtml(audioId)}">${isFav ? "★" : "☆"}</button>
                 </div>
                 <div class="right-controls">
                   <button class="speed-trigger" data-action="speed">${currentSpeed}x</button>
-                  <div class="loop-toggle ${isLoop ? 'active' : ''}" data-action="loop" data-audio-id="${escapeHtml(audioId)}" role="button" tabindex="0">
+                  <div class="loop-toggle ${isLoop ? "active" : ""}" data-action="loop" data-audio-id="${escapeHtml(audioId)}" role="button" tabindex="0">
                     <span class="loop-icon">🔁</span>
-                    <span class="loop-text">${isLoop ? '循环中' : '循环'}</span>
+                    <span class="loop-text">${isLoop ? "循环中" : "循环"}</span>
                   </div>
                 </div>
               </div>
             </div>
           `;
-        });
-        container.innerHTML = html;
-        if (currentAudioId) {
-          const card = container.querySelector(`.line-card[data-audio-id="${currentAudioId}"]`);
-          if (card) card.classList.add('playing');
+          });
+          container.innerHTML = html;
+          if (currentAudioId) {
+            const card = container.querySelector(
+              `.line-card[data-audio-id="${currentAudioId}"]`,
+            );
+            if (card) card.classList.add("playing");
+          }
+          container.addEventListener("click", (e) => {
+            const playBtn = e.target.closest('[data-action="play"]');
+            const loopBtn = e.target.closest('[data-action="loop"]');
+            const speedBtn = e.target.closest('[data-action="speed"]');
+            const favBtn = e.target.closest('[data-action="fav"]');
+            const progBar = e.target.closest(".progress-bar");
+
+            if (playBtn) {
+              const id = playBtn.dataset.audioId;
+              if (currentAudioId === id && bgAudio && !bgAudio.paused)
+                stopCurrent();
+              else playLine(id, loopStates[id] || false);
+            }
+            if (loopBtn) {
+              e.stopPropagation();
+              toggleLoop(loopBtn.dataset.audioId, loopBtn);
+            }
+            if (speedBtn) {
+              e.stopPropagation();
+              openSpeedMenu(speedBtn);
+            }
+            if (favBtn) {
+              e.stopPropagation();
+              toggleFavorite(favBtn.dataset.audioId, favBtn);
+            }
+            if (progBar) {
+              handleProgressBarClick(e, progBar.dataset.audioId);
+            }
+          });
+          container.querySelectorAll(".line-card").forEach((card) => {
+            const audioId = card.dataset.audioId;
+            const line = lines.find((l) => l.audio === audioId);
+            if (line) setupLongPress(card, line);
+          });
         }
-        container.addEventListener('click', (e) => {
-          const playBtn = e.target.closest('[data-action="play"]');
-          const loopBtn = e.target.closest('[data-action="loop"]');
-          const speedBtn = e.target.closest('[data-action="speed"]');
-          const favBtn = e.target.closest('[data-action="fav"]');
-          const progBar = e.target.closest('.progress-bar');
 
-          if (playBtn) {
-            const id = playBtn.dataset.audioId;
-            if (currentAudioId === id && bgAudio && !bgAudio.paused) stopCurrent();
-            else playLine(id, loopStates[id] || false);
-          }
-          if (loopBtn) {
-            e.stopPropagation();
-            toggleLoop(loopBtn.dataset.audioId, loopBtn);
-          }
-          if (speedBtn) {
-            e.stopPropagation();
-            openSpeedMenu(speedBtn);
-          }
-          if (favBtn) {
-            e.stopPropagation();
-            toggleFavorite(favBtn.dataset.audioId, favBtn);
-          }
-          if (progBar) {
-            handleProgressBarClick(e, progBar.dataset.audioId);
-          }
-        });
-        container.querySelectorAll('.line-card').forEach(card => {
-          const audioId = card.dataset.audioId;
-          const line = lines.find(l => l.audio === audioId);
-          if (line) setupLongPress(card, line);
-        });
-      }
-
-      function applyFilter() {
-        const keyword = searchInput.value.trim().toLowerCase();
-        const onlyFav = filterFavBtn.classList.contains('active');
-        filteredLines = allLines.filter(line => {
-          if (onlyFav && !favorites.has(line.audio)) return false;
-          if (!keyword) return true;
-          return line.romaji.toLowerCase().includes(keyword) ||
-                 line.japanese.includes(keyword) ||
-                 line.chinese.includes(keyword);
-        });
-        if (currentAudioId && !filteredLines.some(l => l.audio === currentAudioId)) stopCurrent();
-        renderLines(filteredLines);
-      }
-
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && bgAudio && bgAudio.paused && currentAudioId) {
-          bgAudio.play().catch(() => {});
+        function applyFilter() {
+          const keyword = searchInput.value.trim().toLowerCase();
+          const onlyFav = filterFavBtn.classList.contains("active");
+          filteredLines = allLines.filter((line) => {
+            if (onlyFav && !favorites.has(line.audio)) return false;
+            if (!keyword) return true;
+            return (
+              line.romaji.toLowerCase().includes(keyword) ||
+              line.japanese.includes(keyword) ||
+              line.chinese.includes(keyword)
+            );
+          });
+          if (
+            currentAudioId &&
+            !filteredLines.some((l) => l.audio === currentAudioId)
+          )
+            stopCurrent();
+          renderLines(filteredLines);
         }
-      });
 
-      playPauseBtn.addEventListener('click', togglePlayPause);
-      prevBtn.addEventListener('click', playPrev);
-      nextBtn.addEventListener('click', playNext);
-      globalSpeedTrigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openSpeedMenu(globalSpeedTrigger);
-      });
-      autoPlayBtn.addEventListener('click', () => {
-        autoPlay = !autoPlay;
-        autoPlayBtn.classList.toggle('active', autoPlay);
-        autoPlayBtn.textContent = autoPlay ? '自动✓' : '自动';
-        savePreferences();
-      });
-      abBtn.addEventListener('click', enterABSetMode);
-      searchInput.addEventListener('input', applyFilter);
-      filterFavBtn.addEventListener('click', () => {
-        filterFavBtn.classList.toggle('active');
-        applyFilter();
-      });
+        document.addEventListener("visibilitychange", () => {
+          if (!document.hidden && bgAudio && bgAudio.paused && currentAudioId) {
+            bgAudio.play().catch(() => {});
+          }
+        });
 
-      // 剧集切换
-      episodeSelect.addEventListener('change', () => {
-        loadEpisode(episodeSelect.value);
-      });
+        playPauseBtn.addEventListener("click", togglePlayPause);
+        prevBtn.addEventListener("click", playPrev);
+        nextBtn.addEventListener("click", playNext);
+        globalSpeedTrigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openSpeedMenu(globalSpeedTrigger);
+        });
+        autoPlayBtn.addEventListener("click", () => {
+          autoPlay = !autoPlay;
+          autoPlayBtn.classList.toggle("active", autoPlay);
+          autoPlayBtn.textContent = autoPlay ? "自动✓" : "自动";
+          savePreferences();
+        });
+        abBtn.addEventListener("click", enterABSetMode);
+        searchInput.addEventListener("input", applyFilter);
+        filterFavBtn.addEventListener("click", () => {
+          filterFavBtn.classList.toggle("active");
+          applyFilter();
+        });
 
-      speedMenu.addEventListener('click', (e) => {
-        const li = e.target.closest('li');
-        if (!li) return;
-        setSpeed(parseFloat(li.dataset.speed));
-        closeSpeedMenu();
-      });
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.speed-trigger') && !e.target.closest('#speedMenu')) {
+        // 剧集切换
+        episodeSelect.addEventListener("change", () => {
+          loadEpisode(episodeSelect.value);
+        });
+
+        speedMenu.addEventListener("click", (e) => {
+          const li = e.target.closest("li");
+          if (!li) return;
+          setSpeed(parseFloat(li.dataset.speed));
           closeSpeedMenu();
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !e.target.closest(".speed-trigger") &&
+            !e.target.closest("#speedMenu")
+          ) {
+            closeSpeedMenu();
+          }
+        });
+        speedMenu.addEventListener("click", (e) => e.stopPropagation());
+
+        // 初始化
+        loadPreferences();
+        updateAllSpeedDisplay();
+        if (autoPlay) {
+          autoPlayBtn.classList.add("active");
+          autoPlayBtn.textContent = "自动✓";
         }
-      });
-      speedMenu.addEventListener('click', (e) => e.stopPropagation());
 
-      // 初始化
-      loadPreferences();
-      updateAllSpeedDisplay();
-      if (autoPlay) {
-        autoPlayBtn.classList.add('active');
-        autoPlayBtn.textContent = '自动✓';
-      }
-
-      // 加载上次选择的剧集（默认为 ep1）
-      loadEpisode(episodeSelect.value || 'ep1');
-    })();
-  </script>
-</body>
+        // 加载上次选择的剧集（默认为 ep1）
+        loadEpisode(episodeSelect.value || "ep1");
+      })();
+    </script>
+  </body>
 </html>
