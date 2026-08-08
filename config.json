@@ -1,0 +1,21 @@
+{
+  "dramas": [
+    {
+      "id": "jss",
+      "name": "寄生兽",
+      "type": "japanese",
+      "episodes": [
+        { "id": "ep01", "name": "第一集" },
+        { "id": "ep02", "name": "第二集" }
+      ]
+    },
+    {
+      "id": "my_en_drama",
+      "name": "My English Drama",
+      "type": "english",
+      "episodes": [
+        { "id": "ep01", "name": "Episode 1" }
+      ]
+    }
+  ]
+}
