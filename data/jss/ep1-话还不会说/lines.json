@@ -1,0 +1,128 @@
+[
+  {
+    "romaji": "Arya sōtō okotteru ne",
+    "japanese": "ありゃ相当（そうとう）怒（おこ）ってるね",
+    "chinese": "看那样子是相当生气啊",
+    "audio": "line_001.mp3"
+  },
+  {
+    "romaji": "Shōganai",
+    "japanese": "しょうがない",
+    "chinese": "真拿你没办法",
+    "audio": "line_002.mp3"
+  },
+  {
+    "romaji": "Osananajimi no yoshimi de",
+    "japanese": "幼馴染（おさななじ）みのよしみで",
+    "chinese": "看在是青梅竹马的份上",
+    "audio": "line_003.mp3"
+  },
+  {
+    "romaji": "Satomi ni wa atashi kara ayamattoite ageru yo",
+    "japanese": "里美（さとみ）にはあたしから謝（あやま）っといてあげるよ",
+    "chinese": "我帮你去给里美道歉",
+    "audio": "line_004.mp3"
+  },
+  {
+    "romaji": "Hontō ni tasukaru yo",
+    "japanese": "本当（ほんとう）に 助（たす）かるよ",
+    "chinese": "真的？ 太感谢了",
+    "audio": "line_005.mp3"
+  },
+  {
+    "romaji": "Sore yori hontō ni daijōbu",
+    "japanese": "それより 本当（ほんとう）に大丈夫（だいじょうぶ）",
+    "chinese": "话说回来 你真的没事吗",
+    "audio": "line_006.mp3"
+  },
+  {
+    "romaji": "Kyō no Izumi-kun nanka hen da yo",
+    "japanese": "今日（きょう）の泉（いずみ）くん なんか変（へん）だよ",
+    "chinese": "今天你可是有点不对劲啊",
+    "audio": "line_007.mp3"
+  },
+  {
+    "romaji": "Un chotto kibun mo warui shi",
+    "japanese": "うん ちょっと気分（きぶん）も悪（わる）いし",
+    "chinese": "嗯 就是有些不舒服",
+    "audio": "line_008.mp3"
+  },
+  {
+    "romaji": "Sensei ni itte sōtai sasete morau yo",
+    "japanese": "先生（せんせい）に言（い）って 早退（そうたい）させてもらうよ",
+    "chinese": "我去跟老师打声招呼早退吧",
+    "audio": "line_009.mp3"
+  },
+  {
+    "romaji": "Are migite shippai...",
+    "japanese": "あれ 右手（みぎて） 失敗（しっぱい）…",
+    "chinese": "咦 右手 失败了…",
+    "audio": "line_010.mp3"
+  },
+  {
+    "romaji": "Shi shippai",
+    "japanese": "し 失敗（しっぱい）",
+    "chinese": "失…失败",
+    "audio": "line_011.mp3"
+  },
+  {
+    "romaji": "Boku no migite wa",
+    "japanese": "僕（ぼく）の右手（みぎて）は",
+    "chinese": "我的右手呢",
+    "audio": "line_012.mp3"
+  },
+  {
+    "romaji": "Kucchimatta yo...",
+    "japanese": "食（く）っちまったよ…",
+    "chinese": "吃掉了啊…",
+    "audio": "line_013.mp3"
+  },
+  {
+    "romaji": "Kotoba... mada sukoshi... dekinai",
+    "japanese": "言葉（ことば）… まだ少（すこ）し… できない",
+    "chinese": "话…还有点…不会说",
+    "audio": "line_014.mp3"
+  },
+  {
+    "romaji": "Oshiete... Shin'ichi...",
+    "japanese": "教（おし）えて… シンイチ…",
+    "chinese": "教教我 新一",
+    "audio": "line_015.mp3"
+  },
+  {
+    "romaji": "Omae nan nan da",
+    "japanese": "お前（まえ） 何（なに）なんだ",
+    "chinese": "你到底是什么东西",
+    "audio": "line_016.mp3"
+  },
+  {
+    "romaji": "Tsukareta nemuru",
+    "japanese": "疲（つか）れた 眠（ねむ）る",
+    "chinese": "累了 我睡了",
+    "audio": "line_017.mp3"
+  },
+  {
+    "romaji": "Chotto matte kikitai koto ga yama hodo arun da",
+    "japanese": "ちょっと待（ま）って 聞（き）きたいことが山（やま）ほどあるんだ",
+    "chinese": "你给我等等 我还有一大堆事想问你",
+    "audio": "line_018.mp3"
+  },
+  {
+    "romaji": "Oi oitteba",
+    "japanese": "おい おいってば",
+    "chinese": "喂 我说你啊",
+    "audio": "line_019.mp3"
+  },
+  {
+    "romaji": "Dō sureba iin da",
+    "japanese": "どうすればいいんだ",
+    "chinese": "我该怎么办",
+    "audio": "line_020.mp3"
+  },
+  {
+    "romaji": "Oi ii kagen okiro",
+    "japanese": "おい いい加減（かげん）起（お）きろ",
+    "chinese": "喂 你差不多该醒了吧",
+    "audio": "line_021.mp3"
+  }
+]

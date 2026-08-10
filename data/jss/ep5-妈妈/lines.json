@@ -1,0 +1,370 @@
+```json
+[
+  {
+    "romaji": "Kimi no shokuji ni wa katayori ga aru yō da",
+    "japanese": "君（きみ）の食事（しょくじ）には偏（かたよ）りがあるようだ",
+    "chinese": "你好像有点偏食啊",
+    "audio": "line_001.mp3"
+  },
+  {
+    "romaji": "Aji nanka wakaranai kuse ni",
+    "japanese": "味（あじ）なんか分（わ）からないくせに",
+    "chinese": "你明明都尝不出味道",
+    "audio": "line_002.mp3"
+  },
+  {
+    "romaji": "Kimi no hahaoya wa baransu no toreta shokuji o tsukutte kureta",
+    "japanese": "君（きみ）の母親（ははおや）はバランスの取（と）れた食事（しょくじ）を作（つく）ってくれた",
+    "chinese": "你妈妈做的饭菜就很营养均衡",
+    "audio": "line_003.mp3"
+  },
+  {
+    "romaji": "Ashita ni nareba taberareru yo",
+    "japanese": "明日（あした）になれば食（た）べられるよ",
+    "chinese": "反正明天就可以吃到了吧",
+    "audio": "line_004.mp3"
+  },
+  {
+    "romaji": "Are kara renraku ga nai",
+    "japanese": "あれから連絡（れんらく）がない",
+    "chinese": "从那之后再也没有联系",
+    "audio": "line_005.mp3"
+  },
+  {
+    "romaji": "Semete basho sae wakareba",
+    "japanese": "せめて 場所（ばしょ）さえ分（わ）かれば",
+    "chinese": "至少让我知道地点的话…",
+    "audio": "line_006.mp3"
+  },
+  {
+    "romaji": "Shin'ichi karada o chanto yasumasero",
+    "japanese": "シンイチ 体（からだ）をちゃんと休（やす）ませろ",
+    "chinese": "新一 你让身体好好休息一下",
+    "audio": "line_007.mp3"
+  },
+  {
+    "romaji": "Bakemono",
+    "japanese": "化（ば）け物（もの）",
+    "chinese": "怪物",
+    "audio": "line_008.mp3"
+  },
+  {
+    "romaji": "Denwa de tōsan wa tashika ni sō itta",
+    "japanese": "電話（でんわ）で父（とう）さんは確（たし）かにそう言（い）った",
+    "chinese": "爸爸确实在电话里是这么说的",
+    "audio": "line_009.mp3"
+  },
+  {
+    "romaji": "Bakemono tte ittara omaera igai ni nai",
+    "japanese": "化（ば）け物（もの）って言（い）ったらお前（まえ）ら以外（いがい）にない",
+    "chinese": "怪物的话除了你们没别的了",
+    "audio": "line_010.mp3"
+  },
+  {
+    "romaji": "Mate Shin'ichi",
+    "japanese": "待（ま）て シンイチ",
+    "chinese": "等等 新一",
+    "audio": "line_011.mp3"
+  },
+  {
+    "romaji": "Watashi no nakama ga arawareta",
+    "japanese": "私（わたし）の仲間（なかま）が現（あらわ）れた",
+    "chinese": "我的同类出现了",
+    "audio": "line_012.mp3"
+  },
+  {
+    "romaji": "Kochira ni chikazuite kuru",
+    "japanese": "こちらに近（ちか）づいてくる",
+    "chinese": "正在朝这里靠近",
+    "audio": "line_013.mp3"
+  },
+  {
+    "romaji": "Omae no sei da kara na",
+    "japanese": "お前（まえ）のせいだからな",
+    "chinese": "这一切都是你的错",
+    "audio": "line_014.mp3"
+  },
+  {
+    "romaji": "Boku wa motomoto ryokō ni wa hantai dattan da",
+    "japanese": "僕（ぼく）はもともと旅行（りょこう）には反対（はんたい）だったんだ",
+    "chinese": "我本来就反对他们去旅行的",
+    "audio": "line_015.mp3"
+  },
+  {
+    "romaji": "Sore o omae ga daijōbu da tte iu kara",
+    "japanese": "それをお前（まえ）が大丈夫（だいじょうぶ）だって言（い）うから",
+    "chinese": "就因为你说不会有事",
+    "audio": "line_016.mp3"
+  },
+  {
+    "romaji": "Watashi wa daijōbu to wa itteinai",
+    "japanese": "私（わたし）は大丈夫（だいじょうぶ）とは言（い）っていない",
+    "chinese": "我没断言不会有事",
+    "audio": "line_017.mp3"
+  },
+  {
+    "romaji": "Kakuritsu kara sureba hito no ōi… damare",
+    "japanese": "確率（かくりつ）からすれば人（ひと）の多（おお）い… 黙（だま）れ",
+    "chinese": "只是从概率上来说人多的地方… 闭嘴",
+    "audio": "line_018.mp3"
+  },
+  {
+    "romaji": "Omae ga migite ni mogurikonda toki ni uchiakete rya yokattan da",
+    "japanese": "お前（まえ）が右手（みぎて）に潜（もぐ）り込（こ）んだときに打（う）ち明（あ）けてりゃよかったんだ",
+    "chinese": "从你寄生在我的右手上的时候我就应该告诉他们的",
+    "audio": "line_019.mp3"
+  },
+  {
+    "romaji": "Kimi ga iroiro iitai koto wa wakaru ga",
+    "japanese": "君（きみ）がいろいろ言（い）いたいことは分（わ）かるが",
+    "chinese": "虽然我知道你有很多话要说",
+    "audio": "line_020.mp3"
+  },
+  {
+    "romaji": "Ima wa me no mae no tatakai no koto o kangaete kure",
+    "japanese": "今（いま）は目（め）の前（まえ）の戦（たたか）いのことを考（かんが）えてくれ",
+    "chinese": "但现在先专心考虑眼前的战斗吧",
+    "audio": "line_021.mp3"
+  },
+  {
+    "romaji": "Iya kimi wa kokorogamae dake de ii",
+    "japanese": "いや 君（きみ）は心構（こころがま）えだけでいい",
+    "chinese": "不 你只需要做好心理准备就行",
+    "audio": "line_022.mp3"
+  },
+  {
+    "romaji": "Aite ga wareware o teki to handan suru mae ni watashi ga ichigeki de taosu",
+    "japanese": "相手（あいて）がわれわれを敵（てき）と判断（はんだん）する前（まえ）に私（わたし）が一撃（いちげき）で倒（たお）す",
+    "chinese": "在对方判断我们是敌人之前我就会一击将它击倒",
+    "audio": "line_023.mp3"
+  },
+  {
+    "romaji": "Tebura de nanka irareru ka",
+    "japanese": "手（て）ぶらでなんかいられるか",
+    "chinese": "我怎能两手空空地做一个旁观者",
+    "audio": "line_024.mp3"
+  },
+  {
+    "romaji": "Boku wa ima nikukute nikukute tamaranain da",
+    "japanese": "僕（ぼく）は今（いま）憎（にく）くて憎（にく）くてたまらないんだ",
+    "chinese": "我现在可是恨得咬牙切齿啊",
+    "audio": "line_025.mp3"
+  },
+  {
+    "romaji": "Ano bakemono-domo ga",
+    "japanese": "あの化（ば）け物（もの）どもが",
+    "chinese": "那些该死的怪物",
+    "audio": "line_026.mp3"
+  },
+  {
+    "romaji": "Ugoki ga tomatta sude ni genkan mae da",
+    "japanese": "動（うご）きが止（と）まった すでに玄関前（げんかんまえ）だ",
+    "chinese": "它停下来了 已经在玄关前了",
+    "audio": "line_027.mp3"
+  },
+  {
+    "romaji": "Kagi o aketa?",
+    "japanese": "鍵（かぎ）を開（あ）けた？",
+    "chinese": "把锁打开了？",
+    "audio": "line_028.mp3"
+  },
+  {
+    "romaji": "Kāsan",
+    "japanese": "母（かあ）さん",
+    "chinese": "妈妈",
+    "audio": "line_029.mp3"
+  },
+  {
+    "romaji": "Kāsan",
+    "japanese": "母（かあ）さん",
+    "chinese": "妈妈？",
+    "audio": "line_030.mp3"
+  },
+  {
+    "romaji": "Ano otoko wa modotteinai no ka",
+    "japanese": "あの男（おとこ）は戻（もど）っていないのか",
+    "chinese": "那个男人没有回来吗",
+    "audio": "line_031.mp3"
+  },
+  {
+    "romaji": "Kāsan…",
+    "japanese": "母（かあ）さん…",
+    "chinese": "妈妈…",
+    "audio": "line_032.mp3"
+  },
+  {
+    "romaji": "Shin'ichi chigau chigau zo",
+    "japanese": "シンイチ 違（ちが）う 違（ちが）うぞ",
+    "chinese": "新一 不对 这不是你妈妈",
+    "audio": "line_033.mp3"
+  },
+  {
+    "romaji": "Okaeri",
+    "japanese": "おかえり",
+    "chinese": "欢迎回来",
+    "audio": "line_034.mp3"
+  },
+  {
+    "romaji": "Are hen da na kāsan?",
+    "japanese": "あれ 変（へん）だな 母（かあ）さん？",
+    "chinese": "咦 真奇怪啊… 妈妈？",
+    "audio": "line_035.mp3"
+  },
+  {
+    "romaji": "Dōshita wake da naze migite ni kisei shiteiru",
+    "japanese": "どうしたわけだ なぜ右手（みぎて）に寄生（きせい）している",
+    "chinese": "怎么回事 为什么寄生在右手上",
+    "audio": "line_036.mp3"
+  },
+  {
+    "romaji": "Yatsu wa kimi no hahaoya no atama o ubattan da",
+    "japanese": "ヤツは君（きみ）の母親（ははおや）の頭（あたま）を奪（うば）ったんだ",
+    "chinese": "它夺去了你母亲的头部",
+    "audio": "line_037.mp3"
+  },
+  {
+    "romaji": "E? Migite?",
+    "japanese": "え？ 右手（みぎて）？",
+    "chinese": "什么 右手？",
+    "audio": "line_038.mp3"
+  },
+  {
+    "romaji": "Ā kore motto hayaku uchiakeyou to omottetan da kedo",
+    "japanese": "ああ これ もっと早（はや）く打（う）ち明（あ）けようと思（おも）ってたんだけど",
+    "chinese": "啊 你说这个啊 我本想早点告诉你们的",
+    "audio": "line_039.mp3"
+  },
+  {
+    "romaji": "Tsui… ne",
+    "japanese": "つい… ね",
+    "chinese": "一不小心就…",
+    "audio": "line_040.mp3"
+  },
+  {
+    "romaji": "Datte odoroku daro konna…",
+    "japanese": "だって 驚（おどろ）くだろ こんな…",
+    "chinese": "因为你看 会被吓到不是吗 这种东西",
+    "audio": "line_041.mp3"
+  },
+  {
+    "romaji": "Shin'ichi chigaun da yo urusai",
+    "japanese": "シンイチ 違（ちが）うんだよ うるさい",
+    "chinese": "新一 它不是… 闭嘴",
+    "audio": "line_042.mp3"
+  },
+  {
+    "romaji": "Ano otoko wa yahari shinda no ka",
+    "japanese": "あの男（おとこ）はやはり死（し）んだのか",
+    "chinese": "那个男人果然还是死了吗",
+    "audio": "line_043.mp3"
+  },
+  {
+    "romaji": "Iya ano basho ni modotte mō ichido kakunin suru hitsuyō ga aru na",
+    "japanese": "いや あの場所（ばしょ）に戻（もど）ってもう一度（いちど）確認（かくにん）する必要（ひつよう）があるな",
+    "chinese": "不 我要再回去一趟确认一下",
+    "audio": "line_044.mp3"
+  },
+  {
+    "romaji": "Shin'ichi hōchō ga jama da dokero",
+    "japanese": "シンイチ 包丁（ほうちょう）が邪魔（じゃま）だ どけろ",
+    "chinese": "新一 菜刀太碍事了 快拿开",
+    "audio": "line_045.mp3"
+  },
+  {
+    "romaji": "Daitai migite ga shaberu hō ga okashin da yo",
+    "japanese": "だいたい右手（みぎて）が喋（しゃべ）るほうがおかしいんだよ",
+    "chinese": "再说右手会说话才奇怪吧",
+    "audio": "line_046.mp3"
+  },
+  {
+    "romaji": "Sō da yo ne kāsan",
+    "japanese": "そうだよね 母（かあ）さん",
+    "chinese": "是不是啊 妈妈",
+    "audio": "line_047.mp3"
+  },
+  {
+    "romaji": "Migite ka fuun na yatsu da",
+    "japanese": "右手（みぎて）か 不運（ふうん）なヤツだ",
+    "chinese": "右手吗 真是倒霉的家伙",
+    "audio": "line_048.mp3"
+  },
+  {
+    "romaji": "Atama o ubaezu ni ningen no shihai-ka ni aru to wa",
+    "japanese": "頭（あたま）を奪（うば）えずに人間（にんげん）の支配下（しはいか）にあるとは",
+    "chinese": "居然没能侵占大脑还反被人类支配",
+    "audio": "line_049.mp3"
+  },
+  {
+    "romaji": "Kāsan kakushiteta koto wa zenbu hanasu kara",
+    "japanese": "母（かあ）さん 隠（かく）してたことは全部（ぜんぶ）話（はな）すから",
+    "chinese": "妈妈 我会把瞒着你们的事都告诉你们的",
+    "audio": "line_050.mp3"
+  },
+  {
+    "romaji": "Dakara mō warui jōdan wa yamete yo",
+    "japanese": "だからもう悪（わる）い冗談（じょうだん）はやめてよ",
+    "chinese": "所以不要再和我开玩笑了",
+    "audio": "line_051.mp3"
+  },
+  {
+    "romaji": "Shin'ichi me o samase",
+    "japanese": "シンイチ 目（め）を覚（さ）ませ",
+    "chinese": "新一 你清醒点",
+    "audio": "line_052.mp3"
+  },
+  {
+    "romaji": "Kimi no hahaoya wa mō",
+    "japanese": "君（きみ）の母親（ははおや）はもう",
+    "chinese": "你的母亲已经…",
+    "audio": "line_053.mp3"
+  },
+  {
+    "romaji": "Damare damare bakemono wa omae nan da",
+    "japanese": "黙（だま）れ黙（だま）れ 化（ば）け物（もの）はお前（まえ）なんだ",
+    "chinese": "闭嘴闭嘴 你才是怪物",
+    "audio": "line_054.mp3"
+  },
+  {
+    "romaji": "Shin'ichi",
+    "japanese": "シンイチ",
+    "chinese": "新一",
+    "audio": "line_055.mp3"
+  },
+  {
+    "romaji": "Kore ijō shaberu to kiriotosu zo",
+    "japanese": "これ以上（いじょう）喋（しゃべ）ると切（き）り落（お）とすぞ",
+    "chinese": "你再废话我就把你砍下来",
+    "audio": "line_056.mp3"
+  },
+  {
+    "romaji": "Kāsan…",
+    "japanese": "母（かあ）さん…",
+    "chinese": "妈妈…",
+    "audio": "line_057.mp3"
+  },
+  {
+    "romaji": "Kāsan oboeteru yo ne",
+    "japanese": "母（かあ）さん 覚（おぼ）えてるよね",
+    "chinese": "妈妈 你还记得的吧",
+    "audio": "line_058.mp3"
+  },
+  {
+    "romaji": "Sono te no yakedo",
+    "japanese": "その手（て）の火傷（やけど）",
+    "chinese": "你手上的烫伤",
+    "audio": "line_059.mp3"
+  },
+  {
+    "romaji": "Itsumo miru tabi ni ki ni natte",
+    "japanese": "いつも見（み）るたびに気（き）になって",
+    "chinese": "每次看到它我都很愧疚",
+    "audio": "line_060.mp3"
+  },
+  {
+    "romaji": "Kāsan ni ayamaranakya tte",
+    "japanese": "母（かあ）さんに謝（あやま）らなきゃって",
+    "chinese": "想着一定要向你道个歉",
+    "audio": "line_061.mp3"
+  }
+]
+```

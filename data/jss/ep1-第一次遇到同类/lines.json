@@ -1,0 +1,440 @@
+[
+  {
+    "romaji": "Boku no bēkon eggu wa",
+    "japanese": "僕（ぼく）のベーコンエッグは",
+    "chinese": "我的那份培根鸡蛋呢",
+    "audio": "line_001.mp3"
+  },
+  {
+    "romaji": "Kinō tabenai tte itta janai",
+    "japanese": "昨日（きのう）食（た）べないって言（い）ったじゃない",
+    "chinese": "你昨天不是说不吃吗",
+    "audio": "line_002.mp3"
+  },
+  {
+    "romaji": "Asagohan wa shikkari tabenai to ikenain daro",
+    "japanese": "朝（あさ）ご飯（はん）はしっかり食（た）べないといけないんだろ",
+    "chinese": "早饭不是要好好吃吗",
+    "audio": "line_003.mp3"
+  },
+  {
+    "romaji": "Pan mo motto hoshiin da kedo",
+    "japanese": "パンももっと欲（ほ）しいんだけど",
+    "chinese": "我还想再要些面包",
+    "audio": "line_004.mp3"
+  },
+  {
+    "romaji": "Mattaku kimagure nan da kara",
+    "japanese": "まったく 気（き）まぐれなんだから",
+    "chinese": "真是个随性的孩子",
+    "audio": "line_005.mp3"
+  },
+  {
+    "romaji": "Kinō to michi ga chigau na",
+    "japanese": "昨日（きのう）と道（みち）が違（ちが）うな",
+    "chinese": "和昨天走的路不一样啊",
+    "audio": "line_006.mp3"
+  },
+  {
+    "romaji": "Okita no ka",
+    "japanese": "起（お）きたのか",
+    "chinese": "醒了吗",
+    "audio": "line_007.mp3"
+  },
+  {
+    "romaji": "Doko e ikun da",
+    "japanese": "どこへ行（い）くんだ",
+    "chinese": "你要去哪里",
+    "audio": "line_008.mp3"
+  },
+  {
+    "romaji": "Keisatsu ni sōdan suru koto ni shita yo",
+    "japanese": "警察（けいさつ）に相談（そうだん）することにしたよ",
+    "chinese": "我决定去找警察商量一下",
+    "audio": "line_009.mp3"
+  },
+  {
+    "romaji": "Yamete oke",
+    "japanese": "やめておけ",
+    "chinese": "还是算了吧",
+    "audio": "line_010.mp3"
+  },
+  {
+    "romaji": "Kakuri sarete jikken zairyō ni sareru ka hyōhon ni sareru ka",
+    "japanese": "隔離（かくり）されて実験材料（じっけんざいりょう）にされるか 標本（ひょうほん）にされるか",
+    "chinese": "你会被隔离并当成实验材料或是被做成标本",
+    "audio": "line_011.mp3"
+  },
+  {
+    "romaji": "Dochira ni shite mo nichijō seikatsu wa okurenaku naru",
+    "japanese": "どちらにしても日常生活（にちじょうせいかつ）は送（おく）れなくなる",
+    "chinese": "不管怎样你都别想过正常的生活了",
+    "audio": "line_012.mp3"
+  },
+  {
+    "romaji": "Jā boku wa dō sureba iin da",
+    "japanese": "じゃあ 僕（ぼく）はどうすればいいんだ",
+    "chinese": "那你说我该怎么办",
+    "audio": "line_013.mp3"
+  },
+  {
+    "romaji": "Kesa mo itta daro",
+    "japanese": "今朝（けさ）も言（い）っただろ",
+    "chinese": "早上我不是说过了吗",
+    "audio": "line_014.mp3"
+  },
+  {
+    "romaji": "Kyōryoku shiatte ikiteiku shika",
+    "japanese": "協力（きょうりょく）し合（あ）って生（い）きていくしか",
+    "chinese": "只能互帮互助一起生活",
+    "audio": "line_015.mp3"
+  },
+  {
+    "romaji": "Tomare",
+    "japanese": "止（と）まれ",
+    "chinese": "站住",
+    "audio": "line_016.mp3"
+  },
+  {
+    "romaji": "Ōgoe dasu na yo",
+    "japanese": "大声（おおごえ）出（だ）すなよ",
+    "chinese": "别这么大声啊",
+    "audio": "line_017.mp3"
+  },
+  {
+    "romaji": "Nakama ga iru",
+    "japanese": "仲間（なかま）が居（い）る",
+    "chinese": "有同类",
+    "audio": "line_018.mp3"
+  },
+  {
+    "romaji": "Watashi no nakama da dōshu da yo",
+    "japanese": "私（わたし）の仲間（なかま）だ 同種（どうしゅ）だよ",
+    "chinese": "是我的同类 同种生物",
+    "audio": "line_019.mp3"
+  },
+  {
+    "romaji": "Nan datte",
+    "japanese": "なんだって",
+    "chinese": "你说什么",
+    "audio": "line_020.mp3"
+  },
+  {
+    "romaji": "Demo nande wakaru n da",
+    "japanese": "でも なんで分（わ）かるんだ",
+    "chinese": "可你是怎么知道的",
+    "audio": "line_021.mp3"
+  },
+  {
+    "romaji": "Kanjiru nōha no yō na mono o",
+    "japanese": "感（かん）じる 脳波（のうは）のようなものを",
+    "chinese": "可以感觉到 类似于脑电波一类的东西",
+    "audio": "line_022.mp3"
+  },
+  {
+    "romaji": "Hajimete da da ga wakaru zo nakama da",
+    "japanese": "初（はじ）めてだ だが分（わ）かるぞ 仲間（なかま）だ",
+    "chinese": "虽然是第一次 但是我知道 是我的同类",
+    "audio": "line_023.mp3"
+  },
+  {
+    "romaji": "Chokusen ni shite yaku nihyaku-mētoru",
+    "japanese": "直線（ちょくせん）にして 約（やく）200（にひゃく）メートル",
+    "chinese": "直线距离约200米",
+    "audio": "line_024.mp3"
+  },
+  {
+    "romaji": "Boku to onaji yō na me ni atta hito ga hoka ni mo",
+    "japanese": "僕（ぼく）と同（おな）じような目（め）にあった人（ひと）がほかにも",
+    "chinese": "有人和我有同样的遭遇",
+    "audio": "line_025.mp3"
+  },
+  {
+    "romaji": "Migi da migi e itte kure",
+    "japanese": "右（みぎ）だ 右（みぎ）へ行（い）ってくれ",
+    "chinese": "右边 往右走",
+    "audio": "line_026.mp3"
+  },
+  {
+    "romaji": "Shin'ichi",
+    "japanese": "シンイチ",
+    "chinese": "新一",
+    "audio": "line_027.mp3"
+  },
+  {
+    "romaji": "Sono saki o hidari da",
+    "japanese": "その先（さき）を左（ひだり）だ",
+    "chinese": "前面左转",
+    "audio": "line_028.mp3"
+  },
+  {
+    "romaji": "Mukō mo kizuita yō da",
+    "japanese": "向（む）こうも気（き）づいたようだ",
+    "chinese": "看来对方也觉察到了",
+    "audio": "line_029.mp3"
+  },
+  {
+    "romaji": "Dōshita ike yo",
+    "japanese": "どうした 行（い）けよ",
+    "chinese": "怎么了 走啊",
+    "audio": "line_030.mp3"
+  },
+  {
+    "romaji": "Nakama tte hyottoshite nō o ubawareta ningen na no ka",
+    "japanese": "仲間（なかま）って ひょっとして脳（のう）を奪（うば）われた人間（にんげん）なのか",
+    "chinese": "你的同类 难道是被侵占了大脑的人类吗",
+    "audio": "line_031.mp3"
+  },
+  {
+    "romaji": "Kamo shirenai",
+    "japanese": "かもしれない",
+    "chinese": "也许",
+    "audio": "line_032.mp3"
+  },
+  {
+    "romaji": "Iya da yo kimochi warui",
+    "japanese": "嫌（いや）だよ 気持（きも）ち悪（わる）い",
+    "chinese": "不要啊 太恶心了",
+    "audio": "line_033.mp3"
+  },
+  {
+    "romaji": "Watashi wa jibun no shōtai o seikaku ni shiru hitsuyō ga aru",
+    "japanese": "私（わたし）は自分（じぶん）の正体（しょうたい）を正確（せいかく）に知（し）る必要（ひつよう）がある",
+    "chinese": "我需要知道自己的真实姿态",
+    "audio": "line_034.mp3"
+  },
+  {
+    "romaji": "Kimi ni totte mo kore wa jūyō na koto de aru hazu da",
+    "japanese": "君（きみ）にとってもこれは重要（じゅうよう）なことであるはずだ",
+    "chinese": "对你来说这也应该是很重要的事情",
+    "audio": "line_035.mp3"
+  },
+  {
+    "romaji": "Wa... wakatta yo",
+    "japanese": "わ… 分（わ）かったよ",
+    "chinese": "明…明白了",
+    "audio": "line_036.mp3"
+  },
+  {
+    "romaji": "Ato nijū-mētoru ano kado da na",
+    "japanese": "あと20（にじゅう）メートル あの角（かど）だな",
+    "chinese": "还有20米 就在那个拐角里",
+    "audio": "line_037.mp3"
+  },
+  {
+    "romaji": "Shokuji chū rashii",
+    "japanese": "食事中（しょくじちゅう）らしい",
+    "chinese": "好像正在进食",
+    "audio": "line_038.mp3"
+  },
+  {
+    "romaji": "Nigero",
+    "japanese": "逃（に）げろ",
+    "chinese": "快逃",
+    "audio": "line_039.mp3"
+  },
+  {
+    "romaji": "Hashire hayaku",
+    "japanese": "走（はし）れ 早（はや）く",
+    "chinese": "快跑 快点",
+    "audio": "line_040.mp3"
+  },
+  {
+    "romaji": "Nan nan da yo ike tte ittari nigero tte ittari",
+    "japanese": "何（なに）なんだよ 行（い）けって言（い）ったり逃（に）げろって言（い）ったり",
+    "chinese": "怎么回事啊 你让我来又让我逃走",
+    "audio": "line_041.mp3"
+  },
+  {
+    "romaji": "Satsui o kanjita",
+    "japanese": "殺意（さつい）を感（かん）じた",
+    "chinese": "我感受到了杀意",
+    "audio": "line_042.mp3"
+  },
+  {
+    "romaji": "Ningen no mama no omae o ijō na hodo keikai shiteiru",
+    "japanese": "人間（にんげん）のままのお前（まえ）を異常（いじょう）なほど警戒（けいかい）している",
+    "chinese": "它对人类的你异常地警戒",
+    "audio": "line_043.mp3"
+  },
+  {
+    "romaji": "Yaru ki rashii koko de tatakau zo",
+    "japanese": "やる気（き）らしい ここで戦（たたか）うぞ",
+    "chinese": "看来它想打一架 要在这里开战了",
+    "audio": "line_044.mp3"
+  },
+  {
+    "romaji": "Tatakau",
+    "japanese": "戦（たたか）う",
+    "chinese": "开战？",
+    "audio": "line_045.mp3"
+  },
+  {
+    "romaji": "Shin'ichi ga korosaretara watashi mo shinu koto ni naru kara na",
+    "japanese": "新一（しんいち）が殺（ころ）されたら私（わたし）も死（し）ぬことになるからな",
+    "chinese": "你被杀了的话我也会死",
+    "audio": "line_046.mp3"
+  },
+  {
+    "romaji": "Kita zo",
+    "japanese": "来（き）たぞ",
+    "chinese": "来了",
+    "audio": "line_047.mp3"
+  },
+  {
+    "romaji": "Shi... shinzō",
+    "japanese": "し… 心臓（しんぞう）",
+    "chinese": "心…心脏",
+    "audio": "line_048.mp3"
+  },
+  {
+    "romaji": "Miro kutabaru zo",
+    "japanese": "見（み）ろ くたばるぞ",
+    "chinese": "看 它要死了",
+    "audio": "line_049.mp3"
+  },
+  {
+    "romaji": "Yahari inu no naizō ya shōkaki o ryūyō shite ikiteitan da",
+    "japanese": "やはりイヌの内臓（ないぞう）や消化器（しょうかき）を流用（りゅうよう）して生（い）きていたんだ",
+    "chinese": "果然是利用狗的内脏和消化器官活着的",
+    "audio": "line_050.mp3"
+  },
+  {
+    "romaji": "Omae ni nakama ga ita nante",
+    "japanese": "お前（まえ）に仲間（なかま）がいたなんて",
+    "chinese": "你居然还有同类",
+    "audio": "line_051.mp3"
+  },
+  {
+    "romaji": "Atama no bubun dake ga hontai da",
+    "japanese": "頭（あたま）の部分（ぶぶん）だけが本体（ほんたい）だ",
+    "chinese": "只有头部是本体",
+    "audio": "line_052.mp3"
+  },
+  {
+    "romaji": "Shinkei o shihai shite zenshin o ayatsuru wake da ga",
+    "japanese": "神経（しんけい）を支配（しはい）して全身（ぜんしん）を操（あやつ）るわけだが",
+    "chinese": "虽然它支配神经从而操纵了身体",
+    "audio": "line_053.mp3"
+  },
+  {
+    "romaji": "Hontai mizukara ga tsubasa nado ni henshin shita tame",
+    "japanese": "本体（ほんたい）自（みずか）らが翼（つばさ）などに変身（へんしん）したため",
+    "chinese": "但由于本体变身成了翅膀",
+    "audio": "line_054.mp3"
+  },
+  {
+    "romaji": "Chūiryoku ga sanman ni nari shikaku o tsukutta",
+    "japanese": "注意力（ちゅういりょく）が散漫（さんまん）になり 死角（しかく）を作（つく）った",
+    "chinese": "分散了注意力 形成了死角",
+    "audio": "line_055.mp3"
+  },
+  {
+    "romaji": "Omae sekkaku deatta nakama na noni",
+    "japanese": "お前（まえ） せっかく出会（であ）った仲間（なかま）なのに",
+    "chinese": "你好不容易遇到了同类",
+    "audio": "line_056.mp3"
+  },
+  {
+    "romaji": "Inu ka sodatta kankyō no sei mo aru darō ga fubenkyō na yatsu da",
+    "japanese": "イヌか 育（そだ）った環境（かんきょう）のせいもあるだろうが 不勉強（ふべんきょう）なヤツだ",
+    "chinese": "狗吗 虽说和生长的环境也有关系 可真是个无知的家伙",
+    "audio": "line_057.mp3"
+  },
+  {
+    "romaji": "Dakara watashi ga katta",
+    "japanese": "だから私（わたし）が勝（か）った",
+    "chinese": "所以我才赢了",
+    "audio": "line_058.mp3"
+  },
+  {
+    "romaji": "Nanka nasake no kakera mo nai",
+    "japanese": "なんか 情（なさけ）の欠片（かけら）もない",
+    "chinese": "总觉得它没有一丝情感",
+    "audio": "line_059.mp3"
+  },
+  {
+    "romaji": "Mushi to hanashiteiru yō na",
+    "japanese": "虫（むし）と話（はな）しているような",
+    "chinese": "就仿佛是在跟虫子说话似的",
+    "audio": "line_060.mp3"
+  },
+  {
+    "romaji": "Mō keisatsu ni wa ikanakute ii no ka",
+    "japanese": "もう 警察（けいさつ）には行（い）かなくていいのか",
+    "chinese": "你已经不打算去找警察了吗",
+    "audio": "line_061.mp3"
+  },
+  {
+    "romaji": "Ā omae ga inai to boku wa kantan ni korosarete shimau",
+    "japanese": "ああ お前（まえ）がいないと僕（ぼく）は簡単（かんたん）に殺（ころ）されてしまう",
+    "chinese": "嗯 你不在的话我很轻易就会丧命",
+    "audio": "line_062.mp3"
+  },
+  {
+    "romaji": "Ano hen na kisei seibutsu-tachi ni ne",
+    "japanese": "あの変（へん）な寄生生物（きせいせいぶつ）たちにね",
+    "chinese": "被那些寄生生物干掉",
+    "audio": "line_063.mp3"
+  },
+  {
+    "romaji": "Kenmei na handan da",
+    "japanese": "賢明（けんめい）な判断（はんだん）だ",
+    "chinese": "明智的判断",
+    "audio": "line_064.mp3"
+  },
+  {
+    "romaji": "Nā omae ni mo namae ga hoshiin da kedo",
+    "japanese": "なぁ お前（まえ）にも名前（なまえ）が欲（ほ）しいんだけど",
+    "chinese": "话说 你也应该想要个名字吧",
+    "audio": "line_065.mp3"
+  },
+  {
+    "romaji": "Iran",
+    "japanese": "要（い）らん",
+    "chinese": "不需要",
+    "audio": "line_066.mp3"
+  },
+  {
+    "romaji": "Watashi wa ningen de wa nai shi petto demo nai",
+    "japanese": "私（わたし）は人間（にんげん）ではないし ペットでもない",
+    "chinese": "我既不是人类 也不是宠物",
+    "audio": "line_067.mp3"
+  },
+  {
+    "romaji": "Demo itsumo omae toka koitsu ja dō mo na",
+    "japanese": "でも いつもお前（まえ）とかこいつじゃどうもな",
+    "chinese": "但是一直叫「你」「这家伙」什么的也不好吧",
+    "audio": "line_068.mp3"
+  },
+  {
+    "romaji": "De wa Migī to yonde kure",
+    "japanese": "では ミギーと呼（よ）んでくれ",
+    "chinese": "那就叫我米奇吧",
+    "audio": "line_069.mp3"
+  },
+  {
+    "romaji": "Nani Migī",
+    "japanese": "何（なに） ミギー",
+    "chinese": "什么 米奇？",
+    "audio": "line_070.mp3"
+  },
+  {
+    "romaji": "Ā migite o kutte sodatta kara Migī da",
+    "japanese": "ああ 右手（みぎて）を食（く）って育（そだ）ったからミギーだ",
+    "chinese": "对 因为我是吃掉你的右手而活下来的 所以是米奇",
+    "audio": "line_071.mp3"
+  },
+  {
+    "romaji": "Wari to an'ina yatsu da na",
+    "japanese": "割（わり）と安易（あんい）なヤツだな",
+    "chinese": "你还真是随便",
+    "audio": "line_072.mp3"
+  },
+  {
+    "romaji": "Namae to yara ni kyōmi ga nai dake da",
+    "japanese": "名前（なまえ）とやらに興味（きょうみ）がないだけだ",
+    "chinese": "我只是对名字什么的没兴趣罢了",
+    "audio": "line_073.mp3"
+  }
+]

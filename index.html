@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>台词播放器</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans JP", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
@@ -29,15 +35,20 @@
       z-index: 100;
       box-shadow: 0 1px 6px rgba(46, 125, 50, 0.04);
     }
+
     .header-row {
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
       align-items: center;
     }
-    .header-row:last-child { margin-bottom: 0; }
 
-    select, input[type="text"] {
+    .header-row:last-child {
+      margin-bottom: 0;
+    }
+
+    select,
+    input[type="text"] {
       flex: 1;
       padding: 9px 12px;
       border-radius: 14px;
@@ -50,10 +61,13 @@
       -webkit-appearance: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    select:focus, input[type="text"]:focus {
+
+    select:focus,
+    input[type="text"]:focus {
       border-color: #66bb6a;
       box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.15);
     }
+
     select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235a7d5a'%3E%3Cpath d='M6 9L1 4h10z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
@@ -61,75 +75,91 @@
       padding-right: 30px;
     }
 
-    /* ===== 中间滑动区 ===== */
+    /* ===== 中间列表区 ===== */
     .lines-container {
       flex: 1;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
       scroll-behavior: smooth;
       position: relative;
-      padding: 16px 0;
+      padding-bottom: 45vh;
     }
+
     .line-card {
-      min-height: 52vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 36px 24px;
-      margin: 10px 16px;
-      border-radius: 24px;
-      background: #ffffff;
-      border: 2px solid transparent;
-      box-shadow: 0 2px 12px rgba(46, 125, 50, 0.06);
-      transition: border-color 0.3s, box-shadow 0.3s;
-      will-change: transform, opacity;
+      padding: 16px 20px;
+      margin: 0;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #537253;
+      box-shadow: none;
+      transition: background-color 0.2s, opacity 0.3s;
+      will-change: opacity;
     }
+    
+    .line-card:last-child {
+      border-bottom: none;
+    }
+    
     .line-card.active {
-      border-color: rgba(76, 175, 80, 0.35);
-      box-shadow: 0 8px 36px rgba(46, 125, 50, 0.14);
+      background: #f8fcf8;
+      box-shadow: none;
+      border-color: #d8edd8;
+      border-bottom: 2px solid #537253;
     }
 
     .line-content {
       width: 100%;
-      max-width: 520px;
-      text-align: center;
+      max-width: none;
+      text-align: left;
     }
 
     .romaji {
-      font-size: 15px;
+      font-size: 18px;
       color: #7a9a7a;
-      margin-bottom: 16px;
+      margin-bottom: 6px;
       font-style: italic;
       letter-spacing: 0.5px;
     }
 
     .japanese {
-      font-size: 26px;
-      margin-bottom: 20px;
-      line-height: 2.2;
+      font-size: 22px;
+      margin-bottom: 2px;
+      line-height: 2;
       font-weight: 500;
-      color: #1a2e1a;
-    }
-    ruby { ruby-align: center; }
-    rt {
-      font-size: 11px;
-      color: #6b8f6b;
+      color: #203920;
       font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
     }
 
+    ruby {
+      ruby-align: center;
+      -webkit-ruby-align: center;
+      display: ruby;
+    }
+
+    rt {
+      font-size: 0.6em;
+      color: #5a8a5a;
+      font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
+      line-height: 1.2;
+    }
+
     .english {
-      font-size: 22px;
-      margin-bottom: 20px;
+      font-size: 20px;
+      margin-bottom: 8px;
       color: #2d4a2d;
       line-height: 1.5;
       font-weight: 500;
     }
 
     .chinese {
-      font-size: 18px;
-      color: #5a7d5a;
-      margin-bottom: 28px;
+      font-size: 17px;
+      color: #7d725a;
+      margin-bottom: 16px;
       line-height: 1.6;
     }
 
@@ -137,15 +167,16 @@
     .line-controls {
       display: flex;
       gap: 10px;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       flex-wrap: wrap;
     }
+
     .btn {
       padding: 8px 16px;
-      border-radius: 24px;
+      border-radius: 20px;
       border: 1.5px solid #b8d8b8;
-      background: #f0f7f0;
+      background: #ffffff;
       color: #2e5a2e;
       font-size: 13px;
       cursor: pointer;
@@ -155,15 +186,18 @@
       justify-content: center;
       gap: 4px;
     }
+
     .btn:active {
-      background: #d8edd8;
+      background: #eaf5ea;
       transform: scale(0.96);
     }
+
     .btn.active {
       background: #2e7d32;
       border-color: #2e7d32;
       color: #fff;
     }
+
     select.btn {
       padding-right: 30px;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%235a7d5a'%3E%3Cpath d='M5 8L1 3h8z'/%3E%3C/svg%3E");
@@ -174,16 +208,17 @@
     /* ===== 底部控制栏 ===== */
     .footer {
       flex-shrink: 0;
-      padding: 14px 24px 28px;
+      padding: 14px 20px 18px;
       background: #ffffff;
       border-top: 1px solid #d8edd8;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 40px;
+      gap: 28px;
       z-index: 100;
       box-shadow: 0 -1px 6px rgba(46, 125, 50, 0.04);
     }
+
     .control-btn {
       background: none;
       border: none;
@@ -195,22 +230,68 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
-    .control-btn svg { width: 28px; height: 28px; fill: currentColor; }
-    .control-btn:active { color: #2e7d32; background: rgba(46, 125, 50, 0.08); }
+
+    .control-btn svg {
+      width: 40px;
+      height: 40px;
+      fill: currentColor;
+    }
+
+    .control-btn:active {
+      color: #2e7d32;
+      background: rgba(46, 125, 50, 0.08);
+    }
 
     .control-btn.play-btn {
-      width: 68px;
-      height: 68px;
+      width: 64px;
+      height: 64px;
       background: #2e7d32;
       color: #fff;
       box-shadow: 0 4px 16px rgba(46, 125, 50, 0.3);
     }
+
     .control-btn.play-btn:active {
       background: #1b5e20;
       transform: scale(0.95);
     }
-    .control-btn.play-btn svg { width: 32px; height: 32px; }
+
+    .control-btn.play-btn svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    /* 循环模式按钮 */
+    .control-btn.cycle-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: 2px solid #c8e0c8;
+      color: #8aaa8a;
+      font-size: 11px;
+      font-weight: 600;
+      flex-direction: column;
+      gap: 0;
+      line-height: 1.2;
+    }
+
+    .control-btn.cycle-btn .cycle-label {
+      font-size: 12px;
+      margin-top: 1px;
+    }
+
+    .control-btn.cycle-btn.mode-episode {
+      border-color: #66bb6a;
+      color: #2e7d32;
+      background: rgba(102, 187, 106, 0.08);
+    }
+
+    .control-btn.cycle-btn.mode-list {
+      border-color: #e91e63;
+      color: #e91e63;
+      background: rgba(233, 30, 99, 0.06);
+    }
 
     /* 浮动句数指示器 */
     .line-indicator-float {
@@ -250,13 +331,18 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- 顶部 -->
   <div class="header">
     <div class="header-row">
-      <select id="dramaSelect"><option value="">📺 选择剧集</option></select>
-      <select id="episodeSelect"><option value="">📂 选择集数</option></select>
+      <select id="dramaSelect">
+        <option value="">📺 选择剧集</option>
+      </select>
+      <select id="episodeSelect">
+        <option value="">📂 选择集数</option>
+      </select>
     </div>
     <div class="header-row">
       <input type="text" id="searchInput" placeholder="🔍 搜索台词内容..." autocomplete="off">
@@ -272,14 +358,32 @@
   <!-- 底部控制 -->
   <div class="footer">
     <button class="control-btn" id="prevBtn" title="上一句">
-      <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+      <svg viewBox="0 0 24 24">
+        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+      </svg>
     </button>
+
+    <button class="control-btn cycle-btn" id="cycleBtn" title="切换循环模式">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+        <path
+          d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0020 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 004 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
+      </svg>
+      <span class="cycle-label" id="cycleLabel">关闭</span>
+    </button>
+
     <button class="control-btn play-btn" id="playPauseBtn" title="播放/暂停">
-      <svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
-      <svg viewBox="0 0 24 24" id="pauseIcon" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      <svg viewBox="0 0 24 24" id="playIcon">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+      <svg viewBox="0 0 24 24" id="pauseIcon" style="display:none">
+        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+      </svg>
     </button>
+
     <button class="control-btn" id="nextBtn" title="下一句">
-      <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+      <svg viewBox="0 0 24 24">
+        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+      </svg>
     </button>
   </div>
 
@@ -291,10 +395,21 @@
       currentDrama: null,
       currentEpisode: null,
       lines: [],
-      currentIndex: 0,
-      lineSettings: {},      // { index: { speed, loop } }
+      currentIndex: 0, // 视图中心索引
+      playingIndex: 0, // 实际播放索引（与视图分离）
+      lineSettings: {},
       currentAudioPath: null,
       isPlaying: false,
+      isProgrammaticScroll: false,
+      _scrollResetTimer: null,
+
+      // 循环模式：none | episode | list
+      cycleMode: 'none',
+      cycleModes: [
+        { key: 'none', label: '关闭', class: '' },
+        { key: 'episode', label: '', class: 'mode-episode' },
+        { key: 'list', label: '列表', class: 'mode-list' }
+      ],
 
       // DOM
       audio: document.getElementById('mainAudio'),
@@ -304,11 +419,33 @@
       episodeSelect: document.getElementById('episodeSelect'),
       playIcon: document.getElementById('playIcon'),
       pauseIcon: document.getElementById('pauseIcon'),
+      cycleBtn: document.getElementById('cycleBtn'),
+      cycleLabel: document.getElementById('cycleLabel'),
 
       async init() {
         await this.loadConfig();
         this.bindEvents();
-        this.restoreState();
+        const restored = await this.restoreState();
+        if (!restored) {
+          this.autoLoadFirst();
+        }
+        this.updateCycleButton();
+      },
+
+      /* ---------- 默认加载第一个剧集/集数 ---------- */
+      autoLoadFirst() {
+        if (!this.config?.dramas?.length) return;
+        const firstDrama = this.config.dramas[0];
+        this.dramaSelect.value = firstDrama.id;
+        this.onDramaChange(firstDrama.id);
+
+        if (firstDrama.episodes?.length) {
+          const firstEp = firstDrama.episodes[0];
+          setTimeout(() => {
+            this.episodeSelect.value = firstEp.id;
+            this.loadEpisode(firstEp.id);
+          }, 50);
+        }
       },
 
       /* ---------- 配置加载 ---------- */
@@ -320,16 +457,14 @@
         } catch (e) {
           console.warn('加载 config.json 失败，使用内置示例配置', e);
           this.config = {
-            dramas: [
-              {
-                id: "demo_drama",
-                name: "示例日剧",
-                type: "japanese",
-                episodes: [
-                  { id: "ep01", name: "第一集" }
-                ]
-              }
-            ]
+            dramas: [{
+              id: "demo_drama",
+              name: "示例日剧",
+              type: "japanese",
+              episodes: [
+                { id: "ep01", name: "第一集" }
+              ]
+            }]
           };
         }
         this.renderDramaSelect();
@@ -373,18 +508,27 @@
           const data = await res.json();
           this.lines = Array.isArray(data) ? data : (data.lines || []);
           this.currentIndex = 0;
+          this.playingIndex = 0;
           this.renderLines();
           this.saveState();
+          // 确保初始加载后滚动到播放句
+          setTimeout(() => {
+            this.scrollToCurrent();
+            this.updateActiveCard();
+            this.updateCardVisuals();
+          }, 50);
         } catch (e) {
-          this.cardsWrapper.innerHTML = `<div class="empty-state"><div>加载失败：${e.message}<br><small>请检查 ${path} 是否存在</small></div></div>`;
+          this.cardsWrapper.innerHTML =
+            `<div class="empty-state"><div>加载失败：${e.message}<br><small>请检查 ${path} 是否存在</small></div></div>`;
           console.error(e);
         }
       },
 
       /* ---------- 渲染 ---------- */
+      // 【修复1】使用贪婪匹配 ([^（）]+) 确保多个汉字能被正确包裹在一个ruby标签中
       parseJapanese(text) {
         if (!text) return '';
-        return text.replace(/([^（）]+?)（([^）]+)）/g, '<ruby>$1<rt>$2</rt></ruby>');
+        return text.replace(/([^（）]+)（([^）]+)）/g, '<ruby>$1<rt>$2</rt></ruby>');
       },
 
       renderLines() {
@@ -418,19 +562,18 @@
 
           html += `<div class="chinese">${this.escapeHtml(line.chinese || '')}</div>`;
 
-          // 单句控制按钮
           html += `<div class="line-controls">
             <button class="btn" data-action="play" data-index="${index}">
-              ${index === this.currentIndex && this.isPlaying ? '⏸ 暂停' : '▶ 播放'}
+              ${index === this.playingIndex && this.isPlaying ? '⏸ 暂停' : '▶ 播放'}
             </button>
             <select class="btn speed-select" data-action="speed" data-index="${index}">
-              <option value="0.5" ${settings.speed==0.5?'selected':''}>0.5x</option>
-              <option value="0.75" ${settings.speed==0.75?'selected':''}>0.75x</option>
-              <option value="1" ${settings.speed==1?'selected':''}>1.0x</option>
-              <option value="1.25" ${settings.speed==1.25?'selected':''}>1.25x</option>
-              <option value="1.5" ${settings.speed==1.5?'selected':''}>1.5x</option>
+              <option value="0.5" ${settings.speed == 0.5 ? 'selected' : ''}>0.5x</option>
+              <option value="0.75" ${settings.speed == 0.75 ? 'selected' : ''}>0.75x</option>
+              <option value="1" ${settings.speed == 1 ? 'selected' : ''}>1.0x</option>
+              <option value="1.25" ${settings.speed == 1.25 ? 'selected' : ''}>1.25x</option>
+              <option value="1.5" ${settings.speed == 1.5 ? 'selected' : ''}>1.5x</option>
             </select>
-            <button class="btn ${settings.loop?'active':''}" data-action="loop" data-index="${index}">
+            <button class="btn ${settings.loop ? 'active' : ''}" data-action="loop" data-index="${index}">
               🔁 循环
             </button>
           </div>`;
@@ -467,15 +610,24 @@
           // smoothstep 让过渡更自然
           ratio = ratio * ratio * (3 - 2 * ratio);
 
-          const scale = 0.78 + ratio * 0.22;
-          const opacity = 0.25 + ratio * 0.75;
+          const scale = 0.88 + ratio * 0.12;
+          const opacity = 0.35 + ratio * 0.65;
 
           card.style.transform = `scale(${scale})`;
+          card.style.transformOrigin = 'left center';
           card.style.opacity = opacity;
         });
       },
 
+      /* ---------- 滚动停止处理 ---------- */
+      // 【修复2】不播放时不回滚，停在哪就在哪；播放时才回滚到播放句
       onScrollSettled() {
+        if (this.isProgrammaticScroll) {
+          this.isProgrammaticScroll = false;
+          clearTimeout(this._scrollResetTimer);
+          return;
+        }
+
         const containerRect = this.container.getBoundingClientRect();
         const viewportCenter = containerRect.height / 2;
         let closestIndex = 0;
@@ -491,15 +643,17 @@
           }
         });
 
-        if (closestIndex !== this.currentIndex) {
+        // 【修复2】如果当前没有播放，停在哪就在哪，只更新currentIndex，不回滚
+        if (!this.isPlaying) {
           this.currentIndex = closestIndex;
           this.updateActiveCard();
-          this.saveState();
-          this.preloadAdjacent();
-          if (this.isPlaying) {
-            this.playCurrent();
-          }
+          return;
         }
+
+        // 播放时，回滚到播放句
+        this.currentIndex = this.playingIndex;
+        this.scrollToCurrent();
+        this.updateActiveCard();
       },
 
       updateActiveCard() {
@@ -507,7 +661,7 @@
           card.classList.toggle('active', i === this.currentIndex);
           const btn = card.querySelector('[data-action="play"]');
           if (btn) {
-            btn.textContent = (i === this.currentIndex && this.isPlaying) ? '⏸ 暂停' : '▶ 播放';
+            btn.textContent = (i === this.playingIndex && this.isPlaying) ? '⏸ 暂停' : '▶ 播放';
           }
         });
         this.updateIndicator();
@@ -516,17 +670,45 @@
       updateIndicator() {
         const el = document.getElementById('lineIndicator');
         if (this.lines.length) {
-          el.textContent = `${this.currentIndex + 1} / ${this.lines.length}`;
+          el.textContent = `${this.playingIndex + 1} / ${this.lines.length}`;
         } else {
           el.textContent = '- / -';
         }
       },
 
+      // 【修复3】使用手动计算滚动位置，确保目标卡片精确位于视口中间
       scrollToCurrent() {
+        this.isProgrammaticScroll = true;
         const cards = this.cardsWrapper.querySelectorAll('.line-card');
-        if (cards[this.currentIndex]) {
-          cards[this.currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const targetCard = cards[this.currentIndex];
+        if (targetCard) {
+          const containerRect = this.container.getBoundingClientRect();
+          const cardRect = targetCard.getBoundingClientRect();
+          const scrollTop = this.container.scrollTop;
+          // 卡片顶部相对于容器内容顶部的偏移
+          const cardTopRelative = cardRect.top - containerRect.top + scrollTop;
+          // 计算让卡片中心对齐视口中心的滚动位置
+          const targetScrollTop = cardTopRelative - containerRect.height / 2 + cardRect.height / 2;
+          this.container.scrollTo({ top: Math.max(0, targetScrollTop), behavior: 'smooth' });
         }
+        clearTimeout(this._scrollResetTimer);
+        this._scrollResetTimer = setTimeout(() => {
+          this.isProgrammaticScroll = false;
+        }, 800);
+      },
+
+      /* ---------- 循环控制 ---------- */
+      toggleCycleMode() {
+        const idx = this.cycleModes.findIndex(m => m.key === this.cycleMode);
+        this.cycleMode = this.cycleModes[(idx + 1) % this.cycleModes.length].key;
+        this.updateCycleButton();
+        this.saveState();
+      },
+
+      updateCycleButton() {
+        const mode = this.cycleModes.find(m => m.key === this.cycleMode);
+        this.cycleLabel.textContent = mode.label;
+        this.cycleBtn.className = 'control-btn cycle-btn ' + mode.class;
       },
 
       /* ---------- 音频控制 ---------- */
@@ -538,11 +720,11 @@
       },
 
       playCurrent() {
-        const line = this.lines[this.currentIndex];
+        const line = this.lines[this.playingIndex];
         const path = this.getAudioPath(line);
         if (!path) return;
 
-        const settings = this.lineSettings[this.currentIndex] || { speed: 1, loop: false };
+        const settings = this.lineSettings[this.playingIndex] || { speed: 1, loop: false };
 
         if (this.currentAudioPath !== path) {
           this.audio.src = path;
@@ -573,7 +755,8 @@
       },
 
       togglePlay(index) {
-        if (index !== undefined && index !== this.currentIndex) {
+        if (index !== undefined && index !== this.playingIndex) {
+          this.playingIndex = index;
           this.currentIndex = index;
           this.scrollToCurrent();
           this.updateActiveCard();
@@ -589,20 +772,60 @@
       },
 
       next() {
-        if (this.currentIndex < this.lines.length - 1) {
-          this.currentIndex++;
+        if (this.playingIndex < this.lines.length - 1) {
+          this.playingIndex++;
+          this.currentIndex = this.playingIndex;
           this.scrollToCurrent();
           this.updateActiveCard();
           this.playCurrent();
           this.saveState();
         } else {
-          this.pause();
+          // 【修复3】单集循环回滚到第一句，确保第一句在中间位置
+          if (this.cycleMode === 'episode') {
+            this.playingIndex = 0;
+            this.currentIndex = 0;
+            // 使用 requestAnimationFrame 确保DOM更新后再滚动
+            requestAnimationFrame(() => {
+              this.scrollToCurrent();
+              this.updateActiveCard();
+              this.playCurrent();
+              this.saveState();
+            });
+          } else if (this.cycleMode === 'list') {
+            this.loadNextEpisodeAndPlay();
+          } else {
+            this.pause();
+          }
         }
       },
 
       prev() {
-        if (this.currentIndex > 0) {
-          this.currentIndex--;
+        if (this.playingIndex > 0) {
+          this.playingIndex--;
+          this.currentIndex = this.playingIndex;
+          this.scrollToCurrent();
+          this.updateActiveCard();
+          this.playCurrent();
+          this.saveState();
+        }
+      },
+
+      async loadNextEpisodeAndPlay() {
+        if (!this.currentDrama || !this.currentEpisode) return;
+
+        const episodes = this.currentDrama.episodes;
+        const currentEpIndex = episodes.findIndex(e => e.id === this.currentEpisode.id);
+
+        let nextEp;
+        if (currentEpIndex >= 0 && currentEpIndex < episodes.length - 1) {
+          nextEp = episodes[currentEpIndex + 1];
+        } else {
+          nextEp = episodes[0];
+        }
+
+        if (nextEp) {
+          this.episodeSelect.value = nextEp.id;
+          await this.loadEpisode(nextEp.id);
           this.scrollToCurrent();
           this.updateActiveCard();
           this.playCurrent();
@@ -614,7 +837,7 @@
         speed = parseFloat(speed);
         if (!this.lineSettings[index]) this.lineSettings[index] = {};
         this.lineSettings[index].speed = speed;
-        if (index === this.currentIndex) {
+        if (index === this.playingIndex) {
           this.audio.playbackRate = speed;
         }
       },
@@ -627,7 +850,7 @@
         const btn = cards[index]?.querySelector('[data-action="loop"]');
         if (btn) btn.classList.toggle('active', this.lineSettings[index].loop);
 
-        if (index === this.currentIndex) {
+        if (index === this.playingIndex) {
           this.audio.loop = this.lineSettings[index].loop;
         }
       },
@@ -644,7 +867,7 @@
 
       /* ---------- 预加载 ---------- */
       preloadAdjacent() {
-        const indices = [this.currentIndex + 1, this.currentIndex + 2].filter(i => i < this.lines.length);
+        const indices = [this.playingIndex + 1, this.playingIndex + 2].filter(i => i < this.lines.length);
         indices.forEach(i => {
           const line = this.lines[i];
           if (line && line.audio) {
@@ -666,7 +889,8 @@
         }
         cards.forEach((card, i) => {
           const line = this.lines[i];
-          const text = `${line.romaji||''} ${line.japanese||''} ${line.english||''} ${line.chinese||''}`.toLowerCase();
+          const text =
+            `${line.romaji || ''} ${line.japanese || ''} ${line.english || ''} ${line.chinese || ''}`.toLowerCase();
           card.classList.toggle('dimmed', !text.includes(term));
         });
       },
@@ -677,20 +901,22 @@
         localStorage.setItem('linePlayer_state', JSON.stringify({
           drama: this.currentDrama.id,
           episode: this.currentEpisode.id,
-          index: this.currentIndex,
-          settings: this.lineSettings
+          index: this.playingIndex,
+          settings: this.lineSettings,
+          cycleMode: this.cycleMode
         }));
       },
 
       async restoreState() {
         try {
           const raw = localStorage.getItem('linePlayer_state');
-          if (!raw) return;
+          if (!raw) return false;
           const saved = JSON.parse(raw);
           if (saved.settings) this.lineSettings = saved.settings;
+          if (saved.cycleMode) this.cycleMode = saved.cycleMode;
 
           const drama = this.config.dramas.find(d => d.id === saved.drama);
-          if (!drama) return;
+          if (!drama) return false;
 
           this.dramaSelect.value = drama.id;
           this.onDramaChange(drama.id);
@@ -698,12 +924,13 @@
           await new Promise(r => setTimeout(r, 50));
 
           const episode = drama.episodes.find(e => e.id === saved.episode);
-          if (!episode) return;
+          if (!episode) return false;
 
           this.episodeSelect.value = episode.id;
           await this.loadEpisode(episode.id);
 
           if (saved.index >= 0 && saved.index < this.lines.length) {
+            this.playingIndex = saved.index;
             this.currentIndex = saved.index;
             setTimeout(() => {
               this.scrollToCurrent();
@@ -711,8 +938,10 @@
               this.updateCardVisuals();
             }, 100);
           }
+          return true;
         } catch (e) {
           console.error('恢复状态失败', e);
+          return false;
         }
       },
 
@@ -729,6 +958,7 @@
         document.getElementById('playPauseBtn').addEventListener('click', () => this.togglePlay());
         document.getElementById('nextBtn').addEventListener('click', () => this.next());
         document.getElementById('prevBtn').addEventListener('click', () => this.prev());
+        this.cycleBtn.addEventListener('click', () => this.toggleCycleMode());
 
         // 搜索
         const searchInput = document.getElementById('searchInput');
@@ -755,7 +985,7 @@
 
         // 音频自然结束
         this.audio.addEventListener('ended', () => {
-          const settings = this.lineSettings[this.currentIndex];
+          const settings = this.lineSettings[this.playingIndex];
           if (!settings?.loop) {
             this.next();
           }
@@ -779,23 +1009,32 @@
           clearTimeout(scrollTimeout);
           scrollTimeout = setTimeout(() => {
             this.onScrollSettled();
-          }, 250);
+          }, 5000);
         });
 
         // 键盘控制
         document.addEventListener('keydown', (e) => {
           if (e.target.tagName === 'INPUT') return;
-          switch(e.key) {
-            case ' ': e.preventDefault(); this.togglePlay(); break;
-            case 'ArrowDown': e.preventDefault(); this.next(); break;
-            case 'ArrowUp': e.preventDefault(); this.prev(); break;
+          switch (e.key) {
+            case ' ':
+              e.preventDefault();
+              this.togglePlay();
+              break;
+            case 'ArrowDown':
+              e.preventDefault();
+              this.next();
+              break;
+            case 'ArrowUp':
+              e.preventDefault();
+              this.prev();
+              break;
           }
         });
       }
     };
 
-    // 启动
     App.init();
   </script>
 </body>
+
 </html>
