@@ -100,16 +100,27 @@
       transition: background-color 0.2s, opacity 0.3s;
       will-change: opacity;
     }
-    
+
     .line-card:last-child {
       border-bottom: none;
     }
-    
+
     .line-card.active {
       background: #f8fcf8;
       box-shadow: none;
       border-color: #d8edd8;
       border-bottom: 2px solid #537253;
+    }
+
+    /* 小循环样式 - 浅橙色系 */
+    .line-card.mini-loop {
+      background: #fff8f0;
+      border-left: 4px solid #ffb74d;
+    }
+
+    .line-card.mini-loop.active {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
     }
 
     .line-content {
@@ -196,6 +207,19 @@
       background: #2e7d32;
       border-color: #2e7d32;
       color: #fff;
+    }
+
+    /* 小循环按钮样式 */
+    .btn.mini-loop-btn {
+      border-color: #ffe0b2;
+      color: #e65100;
+      background: #ffffff;
+    }
+
+    .btn.mini-loop-btn.active {
+      background: #fff3e0;
+      border-color: #ffb74d;
+      color: #e65100;
     }
 
     select.btn {
@@ -311,6 +335,29 @@
       pointer-events: none;
     }
 
+    /* Toast 弹窗 */
+    .toast {
+      position: fixed;
+      top: 25%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(46, 125, 50, 0.92);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 28px;
+      font-size: 15px;
+      z-index: 200;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
     /* 空状态 */
     .empty-state {
       min-height: 50vh;
@@ -395,8 +442,8 @@
       currentDrama: null,
       currentEpisode: null,
       lines: [],
-      currentIndex: 0, // 视图中心索引
-      playingIndex: 0, // 实际播放索引（与视图分离）
+      currentIndex: 0,
+      playingIndex: 0,
       lineSettings: {},
       currentAudioPath: null,
       isPlaying: false,
@@ -410,6 +457,9 @@
         { key: 'episode', label: '', class: 'mode-episode' },
         { key: 'list', label: '列表', class: 'mode-list' }
       ],
+
+      // 小循环：null | { start, end }
+      miniLoop: null,
 
       // DOM
       audio: document.getElementById('mainAudio'),
@@ -494,6 +544,7 @@
         this.cardsWrapper.innerHTML = '<div class="empty-state"><div>请选择集数</div></div>';
         this.currentEpisode = null;
         this.lines = [];
+        this.miniLoop = null; // 切换剧集清空小循环
         this.updateIndicator();
       },
 
@@ -507,11 +558,21 @@
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           const data = await res.json();
           this.lines = Array.isArray(data) ? data : (data.lines || []);
+
+          // 修正小循环范围，防止越界
+          if (this.miniLoop) {
+            if (this.miniLoop.start >= this.lines.length) {
+              this.miniLoop = null;
+            } else {
+              this.miniLoop.end = Math.min(this.miniLoop.end, this.lines.length - 1);
+              if (this.miniLoop.start > this.miniLoop.end) this.miniLoop = null;
+            }
+          }
+
           this.currentIndex = 0;
           this.playingIndex = 0;
           this.renderLines();
           this.saveState();
-          // 确保初始加载后滚动到播放句
           setTimeout(() => {
             this.scrollToCurrent();
             this.updateActiveCard();
@@ -525,7 +586,6 @@
       },
 
       /* ---------- 渲染 ---------- */
-      // 【修复1】使用贪婪匹配 ([^（）]+) 确保多个汉字能被正确包裹在一个ruby标签中
       parseJapanese(text) {
         if (!text) return '';
         return text.replace(/([^（）]+)（([^）]+)）/g, '<ruby>$1<rt>$2</rt></ruby>');
@@ -541,7 +601,10 @@
 
         this.lines.forEach((line, index) => {
           const card = document.createElement('div');
-          card.className = 'line-card' + (index === this.currentIndex ? ' active' : '');
+          const isInMiniLoop = this.miniLoop && index >= this.miniLoop.start && index <= this.miniLoop.end;
+          card.className = 'line-card' +
+            (index === this.currentIndex ? ' active' : '') +
+            (isInMiniLoop ? ' mini-loop' : '');
           card.dataset.index = index;
 
           const settings = this.lineSettings[index] || { speed: 1, loop: false };
@@ -576,6 +639,9 @@
             <button class="btn ${settings.loop ? 'active' : ''}" data-action="loop" data-index="${index}">
               🔁 循环
             </button>
+            <button class="btn mini-loop-btn ${isInMiniLoop ? 'active' : ''}" data-action="miniLoop" data-index="${index}">
+              ${isInMiniLoop ? '🔂 退出' : '🔂 小循环'}
+            </button>
           </div>`;
 
           html += '</div>';
@@ -607,7 +673,6 @@
           const maxDist = containerRect.height * 0.48;
 
           let ratio = Math.max(0, 1 - distance / maxDist);
-          // smoothstep 让过渡更自然
           ratio = ratio * ratio * (3 - 2 * ratio);
 
           const scale = 0.88 + ratio * 0.12;
@@ -620,7 +685,6 @@
       },
 
       /* ---------- 滚动停止处理 ---------- */
-      // 【修复2】不播放时不回滚，停在哪就在哪；播放时才回滚到播放句
       onScrollSettled() {
         if (this.isProgrammaticScroll) {
           this.isProgrammaticScroll = false;
@@ -643,14 +707,12 @@
           }
         });
 
-        // 【修复2】如果当前没有播放，停在哪就在哪，只更新currentIndex，不回滚
         if (!this.isPlaying) {
           this.currentIndex = closestIndex;
           this.updateActiveCard();
           return;
         }
 
-        // 播放时，回滚到播放句
         this.currentIndex = this.playingIndex;
         this.scrollToCurrent();
         this.updateActiveCard();
@@ -676,7 +738,6 @@
         }
       },
 
-      // 【修复3】使用手动计算滚动位置，确保目标卡片精确位于视口中间
       scrollToCurrent() {
         this.isProgrammaticScroll = true;
         const cards = this.cardsWrapper.querySelectorAll('.line-card');
@@ -685,9 +746,7 @@
           const containerRect = this.container.getBoundingClientRect();
           const cardRect = targetCard.getBoundingClientRect();
           const scrollTop = this.container.scrollTop;
-          // 卡片顶部相对于容器内容顶部的偏移
           const cardTopRelative = cardRect.top - containerRect.top + scrollTop;
-          // 计算让卡片中心对齐视口中心的滚动位置
           const targetScrollTop = cardTopRelative - containerRect.height / 2 + cardRect.height / 2;
           this.container.scrollTo({ top: Math.max(0, targetScrollTop), behavior: 'smooth' });
         }
@@ -695,6 +754,51 @@
         this._scrollResetTimer = setTimeout(() => {
           this.isProgrammaticScroll = false;
         }, 800);
+      },
+
+      /* ---------- 小循环控制 ---------- */
+      toggleMiniLoop(index) {
+        if (this.miniLoop) {
+          // 已有小循环，点击任意小循环按钮都退出
+          this.miniLoop = null;
+          this.showToast('已退出小循环');
+          this.updateMiniLoopStyles();
+          this.saveState();
+        } else {
+          // 开启新小循环：以当前句为起点，往后10句（或到末尾）
+          const start = index;
+          const end = Math.min(index + 9, this.lines.length - 1);
+          this.miniLoop = { start, end };
+          this.updateMiniLoopStyles();
+          this.saveState();
+        }
+      },
+
+      updateMiniLoopStyles() {
+        this.cardsWrapper.querySelectorAll('.line-card').forEach((card, i) => {
+          const isIn = this.miniLoop && i >= this.miniLoop.start && i <= this.miniLoop.end;
+          card.classList.toggle('mini-loop', isIn);
+          const btn = card.querySelector('[data-action="miniLoop"]');
+          if (btn) {
+            btn.textContent = isIn ? '🔂 退出' : '🔂 小循环';
+            btn.classList.toggle('active', isIn);
+          }
+        });
+      },
+
+      showToast(message) {
+        let toast = document.getElementById('miniLoopToast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'miniLoopToast';
+          toast.className = 'toast';
+          document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
       },
 
       /* ---------- 循环控制 ---------- */
@@ -772,6 +876,23 @@
       },
 
       next() {
+        // 【小循环】优先级高于 episode/list，仅低于单句循环
+        if (this.miniLoop && this.playingIndex >= this.miniLoop.start && this.playingIndex <= this.miniLoop.end) {
+          if (this.playingIndex < this.miniLoop.end) {
+            this.playingIndex++;
+          } else {
+            // 小循环最后一句，回到小循环开头
+            this.playingIndex = this.miniLoop.start;
+          }
+          this.currentIndex = this.playingIndex;
+          this.scrollToCurrent();
+          this.updateActiveCard();
+          this.playCurrent();
+          this.saveState();
+          return;
+        }
+
+        // 原有逻辑
         if (this.playingIndex < this.lines.length - 1) {
           this.playingIndex++;
           this.currentIndex = this.playingIndex;
@@ -780,11 +901,9 @@
           this.playCurrent();
           this.saveState();
         } else {
-          // 【修复3】单集循环回滚到第一句，确保第一句在中间位置
           if (this.cycleMode === 'episode') {
             this.playingIndex = 0;
             this.currentIndex = 0;
-            // 使用 requestAnimationFrame 确保DOM更新后再滚动
             requestAnimationFrame(() => {
               this.scrollToCurrent();
               this.updateActiveCard();
@@ -903,7 +1022,8 @@
           episode: this.currentEpisode.id,
           index: this.playingIndex,
           settings: this.lineSettings,
-          cycleMode: this.cycleMode
+          cycleMode: this.cycleMode,
+          miniLoop: this.miniLoop
         }));
       },
 
@@ -914,6 +1034,7 @@
           const saved = JSON.parse(raw);
           if (saved.settings) this.lineSettings = saved.settings;
           if (saved.cycleMode) this.cycleMode = saved.cycleMode;
+          if (saved.miniLoop) this.miniLoop = saved.miniLoop;
 
           const drama = this.config.dramas.find(d => d.id === saved.drama);
           if (!drama) return false;
@@ -977,6 +1098,7 @@
 
           if (action === 'play') this.togglePlay(index);
           else if (action === 'loop') this.toggleLoop(index);
+          else if (action === 'miniLoop') this.toggleMiniLoop(index);
         });
         this.cardsWrapper.addEventListener('change', (e) => {
           const sel = e.target.closest('[data-action="speed"]');
